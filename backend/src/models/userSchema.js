@@ -1,0 +1,156 @@
+import mongoose from "mongoose";
+import bcrypt from 'bcrypt';
+import cryptoRandomString from "crypto-random-string";
+
+const userSchema = new mongoose.Schema({
+
+    emails: [{
+        type: String,
+        required: true
+    }],
+
+    phones: [{
+        countryCode:{
+            type: Number,
+            default: 91
+        },
+        mobileNumber:{
+            type: Number,
+            required: true
+        }
+    }],
+
+    password: String,
+
+    refreshTokenString: String,
+
+    firstName: {
+        type: String,
+        default: "Guest"
+    },
+
+    middleName: String,
+
+    lastname: {
+        type: String,
+        default: "User"
+    },
+
+    gender: {
+        type: String,
+        enum: ["male", "female", "other", "prefer-not-say"],
+        default: "prefer-not-say"
+    },
+
+    date_of_birth: Date,
+
+    address:[{
+        address_line_one:{
+            type: String,
+            trim: true,
+            required: true,
+        },
+        address_line_two:{
+            type: String,
+            trim: true
+        },
+        address_line_three:{
+            type: String,
+            trim: true
+        },
+        district:{
+            type: String,
+            trim: true,
+            required: true
+        },
+        state:{
+            type: String,
+            trim: true,
+            default: "West Bengal"
+        },
+        country:{
+            type: String,
+            trim: true,
+            default: "India"
+        }
+    }],
+
+    employeeId: {
+        type: String,
+        required: true
+    },
+    department: String,
+
+    profilePicURL: String,
+    idCardUrl: String,
+
+    githubURL: String,
+    linkdinURL: String,
+
+    achivementSchema:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"achivementModel"
+    }],
+
+    role: {
+        type: String,
+        enum: ["admin", "faculty"],
+        default: "faculty"
+    },
+
+    createdBy:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:"userModel",
+        required: true
+    },
+
+    updatedAt:{
+        type: Date,
+        default: Date.now,
+    },
+
+    createdAt:{
+        type: Date,
+        default: Date.now,
+    }
+},{
+    timestamps: true
+})
+
+// mongoose pre hook for email formatting
+userSchema.pre('validate', function (next) {
+    const emailRegex = /^\S+@\S+\.\S+$/;
+
+    for (let email of this.emails) {
+        if (!emailRegex.test(email)) {
+            return next(new Error(`Invalid email format: ${email}`));
+        }
+    }
+
+    next();
+});
+
+// Mongoose pre hook to validate 10-digit mobile numbers
+userSchema.pre('validate', function (next) {
+    for (let phone of this.phones) {
+        const numStr = phone.mobileNumber?.toString();
+        if (!numStr || !/^\d{10}$/.test(numStr)) {
+            return next(new Error(`Invalid mobile number: ${phone.mobileNumber}`));
+        }
+    }
+    next();
+});
+
+// mongoose pre hook for automatic password setup
+userSchema.pre('save', async function(next){
+    if (!this.password && this.isNew){
+
+        const password = cryptoRandomString({length: 10, type: 'alphanumeric'});
+        const hashedPassword = await bcrypt.hash(password, 10);
+        this.password = hashedPassword;
+
+    }
+    next();
+})
+
+export default mongoose.model("userModel", userSchema);

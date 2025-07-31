@@ -1,0 +1,54 @@
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# dotenv environment variables
+.env
+.env.*.local
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Optional npm cache
+.npm/
+
+# Optional Yarn cache
+.yarn/
+
+# Build output
+dist/
+build/
+
+# IDE files
+.vscode/
+.idea/
+
+# Coverage reports
+coverage/
+
+# PM2 logs
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# MongoDB dump files
+dump/
+
+# Misc
+*.tgz
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# TypeScript compiled output (if using TypeScript)
+*.tsbuildinfo
+tsconfig.tsbuildinfo
