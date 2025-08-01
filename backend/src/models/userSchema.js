@@ -4,12 +4,12 @@ import cryptoRandomString from "crypto-random-string";
 
 const userSchema = new mongoose.Schema({
 
-    emails: [{
+    email: [{
         type: String,
         required: true
     }],
 
-    phones: [{
+    phone: [{
         countryCode:{
             type: Number,
             default: 91
@@ -31,7 +31,7 @@ const userSchema = new mongoose.Schema({
 
     middleName: String,
 
-    lastname: {
+    lastName: {
         type: String,
         default: "User"
     },
