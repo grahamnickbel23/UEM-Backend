@@ -1,6 +1,7 @@
 import achivementSchema from "../../models/achivementSchema.js";
 import localAuth from "../../utils/localAuth utils.js";
-import sharp from "sharp";
+import imageProcessing from "../../utils/imgePrecessing utils.js";
+import { v4 as uuid } from 'uuid';
 
 export default class achivementController {
 
@@ -18,20 +19,32 @@ export default class achivementController {
         // stop execution if local auth failed
         if (!doesUserExisit) return
 
-        // // edit image to webp and typical resolution
-        // const editedImage = await sharp(filePaths)
-        //     .resize(300, 200)
-        //     .toFormat('webp')
-        //     .toFile('output.webp');
+        // define arrey to store processd image before sending to a specific folder
+        const processedImage = [];
 
-        // if exisit let update info in mongoDB
-        const newData = achivementSchema(data);
-        await newData.save();
+        // do image processing if image is provided
+        if (filePaths) {
 
-        // return ok if all ok
-        return res.status(200).json({
-            success: true,
-            message: `achivement uploaded successfully`
-        })
+            // get all the image via loop
+            for (const file of filePaths) {
+
+                // output file name
+                const outputFileName = `${uuid()}.webp`
+
+                // process image and return link 
+                const imageURL = await imageProcessing(300, 200, file, '/uploads', outputFileName)
+
+            }
+
+            // if exisit let update info in mongoDB
+            const newData = new achivementSchema(data);
+            await newData.save();
+
+            // return ok if all ok
+            return res.status(200).json({
+                success: true,
+                message: `achivement uploaded successfully`
+            })
+        }
     }
 }
