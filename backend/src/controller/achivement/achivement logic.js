@@ -1,6 +1,8 @@
 import achivementSchema from "../../models/achivementSchema.js";
 import localAuth from "../../utils/localAuth utils.js";
 import imageProcessing from "../../utils/imgePrecessing utils.js";
+import AWSServices from "../../utils/aws utils.js";
+import getMetaData from "../../utils/metadata utils.js";
 import { v4 as uuid } from 'uuid';
 
 export default class achivementController {
@@ -29,10 +31,16 @@ export default class achivementController {
             for (const file of filePaths) {
 
                 // output file name
-                const outputFileName = `${uuid()}.webp`
+                const outputFileName = `${uuid()}.webp`;
 
                 // process image and return link 
-                const imageURL = await imageProcessing(300, 200, file, '/uploads', outputFileName)
+                const imageURL = await imageProcessing(300, 200, file, '/uploads', outputFileName);
+
+                // meta data for file 
+                const metaDataObject = getMetaData(userId, data.title, data.targetId);
+
+                // upload images to aws and return link
+                const fileURL = await AWSServices.uploadAWS('uem-backend/achivement-image/', imageURL, metaDataObject);
 
             }
 
