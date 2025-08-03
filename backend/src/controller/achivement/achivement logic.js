@@ -1,9 +1,7 @@
 import achivementSchema from "../../models/achivementSchema.js";
 import localAuth from "../../utils/localAuth utils.js";
-import imageProcessing from "../../utils/imgePrecessing utils.js";
+import achivementFnc from "../../utils/achivementFile utils.js";
 import AWSServices from "../../utils/aws utils.js";
-import getMetaData from "../../utils/metadata utils.js";
-import { v4 as uuid } from 'uuid';
 
 export default class achivementController {
 
@@ -12,8 +10,10 @@ export default class achivementController {
 
         // get the info first
         const data = req.body;
-        const userId = req.token?.userId || data.userId;
-        const filePaths = req.files;
+        const creatorId = req.token.id;
+        const userId = data.person;
+        const imagePaths = req.files['images'] || [];
+        const docPath = req.files['doc'] || [];
 
         // cheack if the target user even exisit
         const doesUserExisit = await localAuth.userIdAuth(userId, res);
@@ -21,38 +21,97 @@ export default class achivementController {
         // stop execution if local auth failed
         if (!doesUserExisit) return
 
-        // define arrey to store processd image before sending to a specific folder
-        const processedImage = [];
+        // aws upload and url return
+        const fileURL = await achivementFnc.aschivementFileUpload(imagePaths, docPath, userId, data);
 
-        // do image processing if image is provided
-        if (filePaths) {
+        // segment links for image and doc
+        data.imageURL = fileURL.imageURL
+        data.docURL = fileURL.docURL
 
-            // get all the image via loop
-            for (const file of filePaths) {
+        // assign creator ID
+        data.createdBy = creatorId;
 
-                // output file name
-                const outputFileName = `${uuid()}.webp`;
+        // if exisit let update info in mongoDB
+        const newData = new achivementSchema(data);
+        await newData.save();
 
-                // process image and return link 
-                const imageURL = await imageProcessing(300, 200, file, '/uploads', outputFileName);
+        // return ok if all ok
+        return res.status(200).json({
+            success: true,
+            message: `achivement uploaded successfully`
+        })
+    }
 
-                // meta data for file 
-                const metaDataObject = getMetaData(userId, data.title, data.targetId);
+    // function for acivement doc read
+    static async docRead(req, res) {
 
-                // upload images to aws and return link
-                const fileURL = await AWSServices.uploadAWS('uem-backend/achivement-image/', imageURL, metaDataObject);
+        // first collect incoming info
+        const { docId } = req.body;
 
-            }
+        // cheak if document exisit
+        const doesDocExisit = await localAuth.documentAuth(docId, res);
 
-            // if exisit let update info in mongoDB
-            const newData = new achivementSchema(data);
-            await newData.save();
+        // stop execution if document does not exisit
+        if (!doesDocExisit) return
 
-            // return ok if all ok
-            return res.status(200).json({
-                success: true,
-                message: `achivement uploaded successfully`
-            })
-        }
+        // clone and sanitize the document before sending
+        const sanitizedDoc = {
+            ...doesDocExist._doc
+        };
+
+        // remove S3-related keys
+        delete sanitizedDoc.docURL.url;
+        delete sanitizedDoc.imgURL.url;
+
+        // return mongoDb
+        return res.status(200).json({
+            success: true,
+            message: sanitizedDoc
+        })
+    }
+
+    // function for doc preview from aws s3
+    static async docPreview(req, res) {
+
+        // collect incoming info 1st
+        const { docId, key } = req.body;
+
+        // verify key is corrupt or not
+        const response = localAuth.verifyKey(docId, key, res);
+
+        // stop execution of verify key fails
+        if (!response) return
+
+        // call aws file streaming
+        await AWSServices.downloadAWS(key, res);
+    }
+
+    // function for achivement doc deletion
+    static async docDelete(req, res) {
+
+        // get the info first
+        const { docId } = req.body;
+
+        // cheak if document exisit
+        const doesDocExisit = await localAuth.documentAuth(docId, res);
+
+        // stop execution if document does not exisit
+        if (!doesDocExisit) return
+
+        // find the aws document keys
+        const imgKeys = doesDocExisit._doc.imgURL.key;
+        const docKeys = doesDocExisit._doc_docURL.key;
+
+        // delete the item from aws
+        await achivementFnc.achivementFileDelete(imgKeys, docKeys);
+
+        // delete the document from mongoB itself
+        await achivementSchema.findByIdAndDelete({ _id: docId })
+
+        // return ok if all good
+        return res.status(200).json({
+            success: true,
+            message: `document deleted sucessfully`
+        })
     }
 }

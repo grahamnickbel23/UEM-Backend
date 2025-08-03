@@ -1,5 +1,7 @@
 import userSchema from "../models/userSchema.js";
+import achivementSchema from "../models/achivementSchema.js";
 import bcrypt from 'bcrypt';
+import path from 'path'
 
 export default class localAuth {
 
@@ -7,7 +9,7 @@ export default class localAuth {
     static async userIdAuth(userId, res) {
 
         // cheak if this userid exisit
-        const doesUserIdExisit = await userSchema.findOne({ _id: userId })
+        const doesUserIdExisit = await userSchema.findById(userId)
 
         // if not found return error
         if (!doesUserIdExisit) {
@@ -51,4 +53,59 @@ export default class localAuth {
         return doesSchemaHaveData
     }
 
+    // genaral docuemetn auth
+    static async documentAuth(docId, res) {
+
+        // cheak of document exisit
+        const doesDocExist = await achivementSchema.findById(docId);
+
+        // if not found return error
+        if (!doesDocExist) {
+            return res.status(404).json({
+                success: false,
+                message: `document does not exisit`
+            })
+        }
+
+        return doesDocExist
+    }
+
+    // corrupt key auth
+    static async verifyKey(docId, foraignKey, res) {
+
+        // get the full key from document
+        const doc = achivementSchema.findById(docId);
+        const folder = path.posix.dirname(foraignKey);
+        const folderName = folder.split('/');
+        const mainFolder = folderName[1];
+
+        // verify the main key
+        if (mainFolder === 'achivement-image') {
+            const verifyKey = doc._doc.imageURL.key
+            if (verifyKey != foraignKey) {
+
+                // return error if key is corrupt
+                return res.status(400).json({
+                    success: false,
+                    message: `key is corrupt`
+                })
+            }
+        }
+
+        // verify main key
+        if (mainFolder === 'achivement-other') {
+            const verifyKey = doc._doc.imageURL.key
+            if (verifyKey != foraignKey) {
+
+                // return error if key is corrupt
+                return res.status(400).json({
+                    success: false,
+                    message: `key is corrupt`
+                })
+            }
+        }
+
+        // return 1 if execution sucessful
+        return 1
+    }
 }

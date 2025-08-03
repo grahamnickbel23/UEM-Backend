@@ -22,9 +22,18 @@ const achivementSchema = new mongoose.Schema({
     currentStatus: String,
     eventDate: Date,
     imageURL: [String],
+    docURL: [String],
     extra: {
         type: mongoose.Schema.Types.Mixed,
         default: {}
+    },
+    lastUpdatedBy:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userModel",
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userModel",
     },
     createdAt: {
         type: Date,

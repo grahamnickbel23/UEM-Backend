@@ -10,8 +10,8 @@ const route = express.Router();
 route.post('/signup', upload.fields([
     
     // multer configaration for multiple file upload
-    {name:'profile pic', maxCount: 1}, 
-    {name:'id card', maxCount: 1}]), 
+    {name:'profile-pic', maxCount: 1}, 
+    {name:'id-card', maxCount: 1}]), 
 
     asyncHandeller(userSignup, 'user creation'));
 
