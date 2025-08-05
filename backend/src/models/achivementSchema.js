@@ -21,13 +21,22 @@ const achivementSchema = new mongoose.Schema({
     identification_number: String,
     currentStatus: String,
     eventDate: Date,
-    imageURL: [String],
-    docURL: [String],
+    imageURL: {
+        type: Map,
+        of: String,
+        default: {}
+    },
+    docURL: {
+        type: Map,
+        of: String,
+        default: {}
+    },
+
     extra: {
         type: mongoose.Schema.Types.Mixed,
         default: {}
     },
-    lastUpdatedBy:{
+    lastUpdatedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userModel",
     },

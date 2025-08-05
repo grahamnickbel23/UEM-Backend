@@ -25,8 +25,15 @@ export default class achivementController {
         const fileURL = await achivementFnc.aschivementFileUpload(imagePaths, docPath, userId, data);
 
         // segment links for image and doc
-        data.imageURL = fileURL.imageURL
-        data.docURL = fileURL.docURL
+        data.imageURL = (fileURL.imageURL || []).reduce((acc, url, index) => {
+            acc[(index + 1).toString()] = url;
+            return acc;
+        }, {});
+
+        data.docURL = (fileURL.docURL || []).reduce((acc, url, index) => {
+            acc[(index + 1).toString()] = url;
+            return acc;
+        }, {});
 
         // assign creator ID
         data.createdBy = creatorId;
