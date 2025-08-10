@@ -1,6 +1,6 @@
 import imageProcessing from "./imgePrecessing utils.js";
 import AWSServices from "./aws utils.js";
-import getMetaData from "./metadata utils";
+import getMetaData from "./metadata utils.js";
 import { v4 as uuid } from 'uuid';
 
 export default class achivementFnc {

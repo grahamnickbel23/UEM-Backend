@@ -10,7 +10,7 @@ export default class achivementController {
 
         // get the info first
         const data = req.body;
-        const creatorId = req.token.id;
+        const creatorId = req.token.userId;
         const userId = data.person;
         const imagePaths = req.files['images'] || [];
         const docPath = req.files['doc'] || [];
