@@ -1,7 +1,7 @@
 import userSchema from "../../models/userSchema.js";
 import localAuth from "../../utils/localAuth utils.js";
 
-export default class editUserInfo {
+export default class editGenaralInfo {
 
     // genaral edit function for auth info
     static async editUserAuthInfo(fieldName, req, res){

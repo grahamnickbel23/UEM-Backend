@@ -1,11 +1,14 @@
 import express from 'express';
 import upload from '../middelewere/multer security.js';
-import { asyncHandeller } from '../utils/asyncHandeller utils.js';
+import wrapperFunction from '../utils/asyncHandeller utils.js';
 import achivementController from '../controller/achivement/achivement logic.js';
 import editAchivement from '../controller/achivement/editAchivement logic.js';
 import acessTokenCheak from '../middelewere/acessTokenCheak secure.js';
 
 const route = express.Router();
+
+// get the class
+const { asyncHandeller } = wrapperFunction;
 
 // routes for achivement creation
 route.post('/creation', upload.fields([

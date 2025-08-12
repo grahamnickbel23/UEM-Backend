@@ -1,10 +1,14 @@
 import express from 'express'
-import { asyncHandeller, asyncHandellerPro } from '../utils/asyncHandeller utils.js';
-import { editUserAuthInfo, editUserInfo } from '../controller/auth/editUserInfo logic.js'
+import wrapperFunction from '../utils/asyncHandeller utils.js';
+import editGenaralInfo from '../controller/auth/editUserInfo logic.js';
 import acessTokenCheak from '../middelewere/acessTokenCheak secure.js';
 import adminCheak from '../middelewere/adminCheak secure.js';
 
 const route = express.Router();
+
+// get the class
+const { asyncHandeller, asyncHandellerPro } = wrapperFunction;
+const { editUserAuthInfo, editUserInfo } = editGenaralInfo;
 
 // user profile update related to auth
 route.post('/edit/email', asyncHandeller(acessTokenCheak, 'acess Token Cheak'), 

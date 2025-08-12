@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import uuid from 'uuid';
+import {v4 as uuid} from 'uuid';
 
 export default function jwtPerser(req, res, next) {
     // get the bearrer token from the request

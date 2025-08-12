@@ -22,6 +22,23 @@ export default class localAuth {
         return doesUserIdExisit
     }
 
+    // user email auth
+    static async userEmailAuth(userEmail, res) {
+
+        // cheak if this user email exisit
+        const doesUserEmailExisit = await userSchema.findOne(userEmail);
+
+        // if not found return error
+        if (!doesUserEmailExisit) {
+            return res.status(404).json({
+                success: false,
+                message: `user email does not exisit`
+            })
+        }
+
+        return doesUserEmailExisit
+    }
+
     // genaral protected auth
     static async genaralAuth(userInfo, password, res) {
 

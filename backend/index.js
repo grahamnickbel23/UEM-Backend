@@ -23,19 +23,19 @@ const PORT = process.env.PORT  || 3000;
 // public api, basic auth
 app.use('/auth', basicAuth);
 
-// basic jwt middelwere 
-app.use(jwtPerser);
-
-// api routes
-app.use('/auth', authRoute);
-app.use('/achivement', achivementRoute);
-
 // basic test api routes
 app.get("/home", (req, res) => {
     return res.status(200).json({
         message: "we trust you bro"
     })
 })
+
+// basic jwt middelwere 
+app.use(jwtPerser);
+
+// api routes
+app.use('/auth', authRoute);
+app.use('/achivement', achivementRoute);
 
 // app.listen
 app.listen(PORT, () => {

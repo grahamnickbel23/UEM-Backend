@@ -1,11 +1,15 @@
 import express from 'express'
 import upload from '../middelewere/multer security.js';
-import { asyncHandeller } from '../utils/asyncHandeller utils.js';
-import { userSignup, userLogin } from '../controller/auth/auth logic.js'
+import wrapperFunction from '../utils/asyncHandeller utils.js';
+import localAuth from '../utils/localAuth utils.js';
 import acessTokenCheak from '../middelewere/acessTokenCheak secure.js';
 import adminCheak from '../middelewere/adminCheak secure.js';
 
 const route = express.Router();
+
+// get the class
+const { asyncHandeller } = wrapperFunction;
+const { userSignup, userLogin } = localAuth;
 
 // main user creation and login route
 route.post('/signup', upload.fields([
