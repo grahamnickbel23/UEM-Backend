@@ -1,12 +1,14 @@
-import imageProcessing from "./imgePrecessing utils.js";
+import imageProcessing from "./imageProcessing utils.js";
+import logger from "../logger/log logger.js";
 import AWSServices from "./aws utils.js";
 import getMetaData from "./metadata utils.js";
+import fs from "fs/promises";
 import { v4 as uuid } from 'uuid';
 
 export default class achivementFnc {
 
     // function to save files in aws
-    static async aschivementFileUpload(imagePaths, docPaths, userId, data) {
+    static async aschivementFileUpload(req, imagePaths, docPaths, userId, data) {
 
         // define arrey to store processd image + doc before sending to a mongoDb
         const processedImage = [];
@@ -22,13 +24,17 @@ export default class achivementFnc {
                 const outputFileName = `${uuid()}.webp`;
 
                 // process image and return link 
-                const imageURL = await imageProcessing(300, 200, img, '/uploads', outputFileName);
+                const imageURL = await imageProcessing(req, 500, 500, img, '/uploads', outputFileName);
 
                 // meta data for image
-                const metaDataObject = getMetaData(userId, data.title, data.person);
+                const metaDataObject = getMetaData(req, userId, data.title, data.person);
 
                 // upload images to aws and return link
-                const imgLocation = await AWSServices.uploadAWS('uem-backend/achivement-image/', imageURL, metaDataObject);
+                const imgLocation = await AWSServices.uploadAWS(req, 'achivement-image', imageURL, metaDataObject);
+
+                // delete image once uploaded
+                await fs.rm(imageURL);
+                
 
                 // add image url to a arrey
                 processedImage.push(imgLocation);
@@ -41,25 +47,36 @@ export default class achivementFnc {
             for (const doc of docPaths) {
 
                 // meta data for doc
-                const metaDataObject = getMetaData(userId, data.title, data.person);
+                const metaDataObject = getMetaData(req, userId, data.title, data.person);
 
                 // upload image to aws
-                const fileURL = await AWSServices.uploadAWS('uem-backend/achivement-other/', doc, metaDataObject);
+                const fileURL = await AWSServices.uploadAWS(req, 'achivement-other', doc, metaDataObject);
+
+                // delete files once uploaded
+                await fs.rm(doc);
 
                 // add doc url to a arrey
                 processedDoc.push(fileURL);
             }
         }
 
+
+        // genarate log after sucessful execution
+        logger.info(`${req.requestId} 
+            input: ${userId, data._id},
+            ACHIVEMENT_UPLOAD sucessful `)
+        
+
         // retun an object with all aws links
         return {
+            
             imageURL: processedImage,
             docURL: processedDoc
         }
     }
 
     // function to delete doc from aws
-    static async achivementFileDelete( imgId, docId ){
+    static async achivementFileDelete( req, imgId, docId ){
 
         // delete image if have one
         if(imgId){
@@ -82,5 +99,10 @@ export default class achivementFnc {
                 await AWSServices.deleteAWS(doc)
             }
         }
+
+        // genarate log after sucessful execution
+        logger.info(`${req.requestId} 
+            input: ${ imgId, docId } 
+            ACHIVEMENT_FILE_DEL sucessful`)
     }
 }

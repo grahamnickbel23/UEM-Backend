@@ -6,15 +6,19 @@ const achivementSchema = new mongoose.Schema({
         enum: ["degree", "book", "talk", "certification", "patent", "publication", "awards"],
         required: true
     },
+
     person: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userModel",
         required: true
     },
+
     title: {
         type: String,
+        unique: true,
         required: true
     },
+
     description: String,
     organizer: String,
     location: String,
@@ -26,6 +30,7 @@ const achivementSchema = new mongoose.Schema({
         of: String,
         default: {}
     },
+
     docURL: {
         type: Map,
         of: String,
@@ -36,14 +41,27 @@ const achivementSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Mixed,
         default: {}
     },
+
     lastUpdatedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userModel",
     },
+
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+
+    deletedAt: {
+        type: Date,
+        default: null
+    },
+
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "userModel",
     },
+
     createdAt: {
         type: Date,
         default: Date.now
@@ -57,20 +75,11 @@ achivementSchema.post("save", async function (doc, next) {
     try {
         await mongoose.model("userModel").findByIdAndUpdate(
             doc.person,
-            { $addToSet: { achievements: doc._id } }
-        );
-        next();
-    } catch (err) {
-        next(err);
-    }
-});
-
-// Remove reference from user after deleting
-achivementSchema.post("remove", async function (doc, next) {
-    try {
-        await mongoose.model("userModel").findByIdAndUpdate(
-            doc.person,
-            { $pull: { achievements: doc._id } }
+            { $addToSet: { 
+                   achivementSchema : { 
+                      title: doc.title, 
+                      url: doc._id }  
+            } }
         );
         next();
     } catch (err) {

@@ -1,7 +1,13 @@
 import userSchema from "../../models/userSchema.js";
+import AWSServices from "../../utils/aws utils.js";
+import emailUpdate from "../../utils/emailUpdate utils.js";
+import otpVerification from "./otpVerification logic.js";
+import localAuth from "../../utils/localAuth utils.js";
+import genaralResponse from "../../utils/genaralResponse utils.js";
+import tokenAndCookies from "../../utils/tokenAndCookies utils.js";
+import enhancedLogger from "../../logger/enhanced logger.js";
+import logger from "../../logger/log logger.js";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import cryptoRandomString from "crypto-random-string";
 
 export default class userAuth {
 
@@ -10,115 +16,177 @@ export default class userAuth {
 
         // get the incoming data
         const data = req.body;
-        const { email, password, phone, employeeId } = req.body;
+        data.createdBy = req.admin;
+        const imagePath = req.files['profileImage'][0].path;
+        const idCardPath = req.files['idCard'][0].path;
 
-        // let's cheak if user is unqiuqe
-        const emailExist = await userSchema.findOne({ emails: email });
-        const phoneExist = await userSchema.findOne({ phones: phone });
-        const employeeIdExist = await userSchema.findOne({ employeeId: employeeId });
-
-        // return error if any of the above exisit
-        if (emailExist || phoneExist || employeeIdExist) {
-            return res.status(409).json({
-                success: true,
-                message: "user already exist"
-            })
+        /// convert phone into expected schema format
+        if (req.body.phone && typeof req.body.phone === "string") {
+            req.body.phone = [{ mobileNumber: Number(req.body.phone) }];
         }
 
-        // if all ok hashed password if provided
-        if (password) {
-            const hashedPassword = await bcrypt.hash(password, 10);
-            data.password = hashedPassword;
+        // convert adress into expected schema format
+        if (req.body.address && typeof req.body.address === "string") {
+            req.body.address = JSON.parse(req.body.address);
+        }
+
+        // let's cheak if user is unqiuqe
+        const userInfo = await localAuth.doesUserExisit(req, "body");
+
+        // return error if user already exisit
+        const info = 'user already exist';
+        enhancedLogger.authFailure(
+            req.requestId,
+            userInfo,            // ✅ trigger = true
+            req.admin,       // userId
+            "USER SIGNUP",   // action
+            info,            // reason
+            { attemptedUser: data.email }
+        );
+        genaralResponse.genaral400Error(userInfo, info, res);
+
+        // get the link for profile image and idCard image
+        data.profilePicURL = (await AWSServices.uploadAWS(req, 'profile-picture', imagePath)).url;
+        data.idCardUrl = (await AWSServices.uploadAWS(req, 'achivement-image', idCardPath)).url;
+
+        if (data.password) {
+            data.password = await bcrypt.hash(data.password, 10);
         }
 
         // if user is unique create new user
         const newUser = userSchema(data);
         await newUser.save();
 
+        // provide user notification via email
+        await emailUpdate.newUserUpdate(req);
+
+        // log if sucessful
+        enhancedLogger.authSuccess(req.requestId, newUser._id, `USER SIGNUP`,
+            { email: data.email });
+
         // return success after user is saved
-        return res.status(200).json({
-            success: true,
-            message: `new user created successfully`
-        })
+        const comment = `new user created successfully`;
+        genaralResponse.genaral200Response(comment, res);
     }
 
     // email + employee id based login
-    static async userLogin(req, res) {
+    static async requestLogin(req, res) {
 
         // get the requred info
-        const { email, employeeId, password } = req.body;
+        const { password } = req.body;
 
-        // cheak if user exisit
-        const userExisit = await userSchema.findOne({
-            emails: email,
-            employeeId: employeeId
-        })
+        // cheak if user exisit{
+        const userExisit = await localAuth.doesUserExisit(req, "body");
 
-        // if not return error
-        if (!userExisit) {
-            return res.status(404).json({
-                sccess: false,
-                message: "user does not exisit"
-            })
-        }
+        // if not return 404 error
+        enhancedLogger.authFailure(req.requestId, !userExisit, null, "LOGIN REQUEST", "User not found",
+            { body: req.body });
+
+        genaralResponse.genaral404Error(!userExisit, 'user', res);
+        if (!userExisit) return;
 
         // if all ok cheak does password match
-        const doeesPasswordMatch = bcrypt.compare(password, userExisit.password);
+        const doeesPasswordMatch = await bcrypt.compare(password, userExisit.password);
 
         // return error if does not
-        if (!doeesPasswordMatch) {
-            return res.status(400).json({
-                success: false,
-                message: "password was incorrect"
-            })
-        }
+        const info = "password was incorrect";
+        genaralResponse.genaral400Error(!doeesPasswordMatch, info, res);
 
-        // genarate access token
-        const jwt_key = process.env.JWT_KEY;
-        const userId = userExisit._id;
-        const accessToken = jwt.sign(
-            {
-                userId: userId,
-                role: userExisit.role
-            },
-            jwt_key,
-            { expiresIn: '1h' }
-        )
+        // send otp & ok if all ok
+        await otpVerification.sendOTP(req, res);
 
-        // genarate refresh token
-        const refreshTokenString = cryptoRandomString({ length: 24, type: "alphanumeric" });
-        const hashedToken = await bcrypt.hash(refreshTokenString, 10);
+        // create a log
+        enhancedLogger.authSuccess(req.requestId, userExisit._id, "LOGIN REQUEST",
+            { email: userExisit.email });
+    }
 
-        // save hashed token to database
-        await userSchema.findByIdAndUpdate(
-            userId,
-            { refreshTokenString: hashedToken }
+    // verify otp and send cookies for login
+    static async userLogin(req, res) {
+
+        // get the data from the request
+        const { email } = req.body;
+
+        // verify otp
+        const verificationSucessful = await otpVerification.multiFactorOTP(req, res);
+        enhancedLogger.authFailure(
+            req.requestId,
+            !verificationSucessful,
+            null,
+            "USER_LOGIN",
+            "OTP verification failed",
+            { email });
+        if (!verificationSucessful) return;
+
+        // get the user info
+        const userExisit = await userSchema.findOne({ email });
+
+        // send acess token
+        await tokenAndCookies.acessTokenAndCookies(req, userExisit, res);
+
+        // send refresh token
+        const tokenName = "login_refresh_token"
+        const tokenValidity = '7d'
+        const schema = 'refreshTokenString'
+        await tokenAndCookies.refreshTokenAndCookies(
+            req, tokenName, tokenValidity, userExisit._id, schema, res
         );
 
-        const refreshToken = jwt.sign(
-            { token: refreshTokenString },
-            jwt_key,
-            { expiresIn: '7d' }
+        // create a log in succesful
+        enhancedLogger.authSuccess(req.requestId, userExisit, "USER_LOGIN", { email });
+
+        // respond with all ok
+        const comment = 'logged in successfully';
+        genaralResponse.genaral200Response(comment, res);
+    }
+
+    // get info for user profile
+    static async allInfoForUserProfile(req, res) {
+
+        // make a queary to db
+        const userInfo = await localAuth.doesUserExisit(req, "info");
+
+        /* we caounf have sent this via from /signin too,, but we have to
+        think about frontend desgine too say when due to acess token the profile
+        page loads up direct;y then obvisuly we woil not do a otp shit and 
+        load a new page right ? so we must need to have a direct api for profile
+        and this would not just return info from profile but also achivement too*/
+
+        // return error if user been soft deleted
+        genaralResponse.genaral400Error(
+            (userInfo.isDeleted === true || userInfo.deletedAt !== null),
+            "User does not exist",
+            res
         )
 
-        // send cookies
-        res.cookie("access_token", accessToken, {
-            httpOnly: true,
-            //secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 60 * 60 * 1000 // 1 hour
-        });
+        // edit response
+        const userDetails = userInfo.toObject(); // convert mongoose doc → plain object
+        delete userDetails.password;
+        delete userDetails.otpString;
+        delete userDetails.refreshTokenString;
 
-        res.cookie("refresh_token", refreshToken, {
-            httpOnly: true,
-            //secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        // return user info i response
+        return res.json({
+            success: true,
+            user: userDetails
         });
+    }
 
-        return res.status(200).json({
-            sucess: true,
-            message: 'logged in successfully'
-        })
+    // verify refresh token and send acess token
+    static async acessTokenIssue(req, res) {
+
+        // get the info from the refresh token
+        const data = req.token.token;
+
+        // search via refreshtoken in userschema
+        const userInfo = await userSchema.findOne({ "refreshTokenString": data });
+
+        // produce and send acess token
+        await tokenAndCookies.acessTokenAndCookies(req, userInfo, res);
+
+        // create logger
+        logger.info(`${req.reurestId} input: ${data} ACESSTOKEN_USING_REFRESH_TOKEN`)
+
+        // send ok if all ok
+        genaralResponse.genaral200Response("new acesstoken send succesfully", res)
     }
 }

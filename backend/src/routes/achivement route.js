@@ -3,7 +3,6 @@ import upload from '../middelewere/multer security.js';
 import wrapperFunction from '../utils/asyncHandeller utils.js';
 import achivementController from '../controller/achivement/achivement logic.js';
 import editAchivement from '../controller/achivement/editAchivement logic.js';
-import acessTokenCheak from '../middelewere/acessTokenCheak secure.js';
 
 const route = express.Router();
 
@@ -19,23 +18,21 @@ route.post('/creation', upload.fields([
 
 ]),
 
-asyncHandeller(acessTokenCheak, 'acess Token Cheak'),
 asyncHandeller(achivementController.docCreation, 'achivement creation'));
 
 // routes for reading achivement
-route.post('/read', asyncHandeller(acessTokenCheak, 'acess Token Cheak'),
-    asyncHandeller(achivementController.docRead, 'getting achivement'));
+route.post('/read', asyncHandeller(achivementController.docRead, 'getting achivement'));
+
+// route for reading files
+route.post("/download", asyncHandeller(achivementController.docPreview, 'getting download from AWS'))
 
 // routes for deleting achivement
-route.post('/delete', asyncHandeller(acessTokenCheak, 'acess Token Cheak'),
-    asyncHandeller(achivementController.docDelete, 'deleting acchivement'));
+route.post('/delete', asyncHandeller(achivementController.docDelete, 'deleting acchivement'));
 
 // routes for doc update
-route.post('/update', asyncHandeller(acessTokenCheak, 'acess Token Cheak'),
-    asyncHandeller(editAchivement.updateDoc, 'updating achivement'));
+route.post('/update', asyncHandeller(editAchivement.updateDoc, 'updating achivement'));
 
 // routes for image update
-route.post('/imgupdate', asyncHandeller(acessTokenCheak, 'acess Token Cheak'),
-    asyncHandeller(editAchivement.updateImage, 'updating updating image'));
+route.post('/imgupdate', asyncHandeller(editAchivement.updateImage, 'updating updating image'));
 
 export default route;

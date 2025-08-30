@@ -1,80 +1,49 @@
 import userSchema from "../models/userSchema.js";
 import achivementSchema from "../models/achivementSchema.js";
-import bcrypt from 'bcrypt';
+import logger from "../logger/log logger.js";
 import path from 'path'
 
 export default class localAuth {
 
-    // user id auth
-    static async userIdAuth(userId, res) {
+    // does user exisit
+    static async doesUserExisit(req, target) {
 
-        // cheak if this userid exisit
-        const doesUserIdExisit = await userSchema.findById(userId)
+        // get any identifiable data from request
+        let { email, userId, phone, employeeId } = req[target];
 
-        // if not found return error
-        if (!doesUserIdExisit) {
-            return res.status(404).json({
-                success: false,
-                message: `user id does not exisit`
-            })
-        }
+        // let's cheak if user exist
+        const userInfo = await userSchema.findOne({
+            $or: [
+                { "_id": userId },
+                { "email": email },
+                { "phone": phone },
+                { "employeeId": employeeId },
+            ]
+        })
 
-        return doesUserIdExisit
-    }
+        // better logging
+        logger.info(`${req.requestId} 
+            input: email=${email}, userId=${userId}, phone=${phone}, employeeId=${employeeId}
+            LOCAL_AUTH was successful 
+            return: ${userInfo ? userInfo._id.toString() : "null"}`);
 
-    // user email auth
-    static async userEmailAuth(userEmail, res) {
-
-        // cheak if this user email exisit
-        const doesUserEmailExisit = await userSchema.findOne(userEmail);
-
-        // if not found return error
-        if (!doesUserEmailExisit) {
-            return res.status(404).json({
-                success: false,
-                message: `user email does not exisit`
-            })
-        }
-
-        return doesUserEmailExisit
-    }
-
-    // genaral protected auth
-    static async genaralAuth(userInfo, password, res) {
-
-        // cheak if the record exist on schema
-        const doesSchemaHaveData = await userSchema.findOne(userInfo);
-
-        // handel error logs
-        const errorInfo = Object.keys(userInfo)[0];
-
-        // if no info is foun return error
-        if (!doesSchemaHaveData) {
-            return res.status(404).json({
-                success: false,
-                message: `${errorInfo} does not exisit`
-            })
-        }
-
-        // if all ok go for password cheak
-        const doesPasswordCorrect = await bcrypt.compare(password, doesSchemaHaveData.password);
-
-        // if turn wrong return error
-        if (!doesPasswordCorrect) {
-            return res.status(409).json({
-                success: false,
-                message: `password was incorrect`
-            })
-        }
-
-        return doesSchemaHaveData
+        // return what we for
+        return userInfo;
     }
 
     // genaral docuemetn auth
-    static async documentAuth(docId, res) {
+    static async documentAuth(req, res) {
+
+        // get any identifiable data from request
+        let { docId, title, oldTitle } = req.body;
 
         // cheak of document exisit
-        const doesDocExist = await achivementSchema.findById(docId);
+        const doesDocExist = await achivementSchema.findOne({
+            $or: [
+                { "_id": docId },
+                { "title": oldTitle ?? title }
+            ]
+        });
 
         // if not found return error
         if (!doesDocExist) {
@@ -83,6 +52,12 @@ export default class localAuth {
                 message: `document does not exisit`
             })
         }
+
+        // create a log
+        logger.info(`${req.requestId} 
+            input: ${docId, title, oldTitle} 
+            DOC_AUTH was sucessful 
+            return: ${JSON.stringify(doesDocExist._id), null, 2}`)
 
         return doesDocExist
     }

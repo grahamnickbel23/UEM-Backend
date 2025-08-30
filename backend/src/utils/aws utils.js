@@ -1,15 +1,16 @@
 import { PutObjectCommand, DeleteObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3";
 import connectAWS from "../../connectAWS.js";
+import logger from "../logger/log logger.js";
 import fs from 'fs/promises';
 import path from 'path'
 
 export default class AWSServices {
 
     // define a global Bucket
-    static awsBucket = process.env.BUCKET_NAME;
+    static awsBucket() {  return process.env.BUCKET_NAME };
 
     // method for document upload in s3
-    static async uploadAWS(awsFilePath, inputPath, metaData) {
+    static async uploadAWS(req, awsFilePath, inputPath, metaData) {
 
         // get the filename from filepath
         const fileName = path.basename(inputPath);
@@ -22,18 +23,25 @@ export default class AWSServices {
 
         // now let us upload this to aws s3
         const uploadComand = new PutObjectCommand({
-            Bucket: AWSServices.awsBucket,
+            Bucket: AWSServices.awsBucket(),
             Key: s3,
             Body: fileHeap,
             ContentType: AWSServices.getMimeType(fileName),
-            Metadata: metaData
+            // only if metadata exisit
+            ...(metaData && { Metadata: metaData })
         })
 
         // now let us use the comand 
         await connectAWS().send(uploadComand)
 
         // url of each uploaded file
-        const AWSFileURL = `https://${AWSServices.awsBucket}.s3.${process.env.AWS_REGION}.amazonaws.com/${s3}`;
+        const AWSFileURL = `${s3}`;
+
+        // genarate log after sucessful execution
+        logger.info(`${req.requestId} 
+            input: ${ awsFilePath, inputPath, metaData } 
+            AWS_UPLOAD sucessful 
+            returning: ${s3}`)
 
         return {
             url: AWSFileURL,
@@ -42,10 +50,10 @@ export default class AWSServices {
     }
     
     // aws methid for downloading files at DB
-    static async downloadAWS(awsKey, res) {
+    static async downloadAWS(req, awsKey, res) {
 
         const downloadComand = new GetObjectCommand({
-            Bucket: AWSServices.awsBucket,
+            Bucket: AWSServices.awsBucket(),
             Key: awsKey
         })
 
@@ -56,18 +64,27 @@ export default class AWSServices {
         res.setHeader('Content-Type', response.ContentType || 'application/octet-stream');
         res.setHeader('Content-Disposition', `inline; filename="${awsKey}"`);
 
+        // genarate log after sucessful execution
+        logger.info(`${req.requestId} 
+            input: ${ awsKey } 
+            AWS_DOWNLOAD sucessful 
+            returning files`)
+
         // Pipe the file stream directly to the client response
         response.Body.pipe(res);
     }
 
     // aws method for deleting file at db
-    static async deleteAWS(key) {
+    static async deleteAWS(req, key) {
 
         // delete comand
         await connectAWS().send(DeleteObjectCommand({
-            Bucket: AWSServices.awsBucket,
+            Bucket: AWSServices.awsBucket(),
             Key: key
         }))
+
+        // genarate log after sucessful execution
+       logger.info(`${req.requestId} input: ${ key } AWS_DELETE sucessful`)
     }
 
     // helper function

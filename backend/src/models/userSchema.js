@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from 'bcrypt';
+import { redisConnect } from "../../connectRedis.js";
 import cryptoRandomString from "crypto-random-string";
 
 const userSchema = new mongoose.Schema({
@@ -10,11 +11,11 @@ const userSchema = new mongoose.Schema({
     }],
 
     phone: [{
-        countryCode:{
+        countryCode: {
             type: Number,
             default: 91
         },
-        mobileNumber:{
+        mobileNumber: {
             type: Number,
             required: true
         }
@@ -23,6 +24,8 @@ const userSchema = new mongoose.Schema({
     password: String,
 
     refreshTokenString: String,
+
+    otpString: String,
 
     firstName: {
         type: String,
@@ -44,31 +47,31 @@ const userSchema = new mongoose.Schema({
 
     date_of_birth: Date,
 
-    address:[{
-        address_line_one:{
+    address: [{
+        address_line_one: {
             type: String,
             trim: true,
             required: true,
         },
-        address_line_two:{
+        address_line_two: {
             type: String,
             trim: true
         },
-        address_line_three:{
+        address_line_three: {
             type: String,
             trim: true
         },
-        district:{
+        district: {
             type: String,
             trim: true,
             required: true
         },
-        state:{
+        state: {
             type: String,
             trim: true,
             default: "West Bengal"
         },
-        country:{
+        country: {
             type: String,
             trim: true,
             default: "India"
@@ -87,9 +90,13 @@ const userSchema = new mongoose.Schema({
     githubURL: String,
     linkdinURL: String,
 
-    achivementSchema:[{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"achivementModel"
+    achivementSchema: [{
+        achievementId: { 
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: "achivementModel" 
+        },
+        title: String,
+        url: String
     }],
 
     role: {
@@ -98,22 +105,32 @@ const userSchema = new mongoose.Schema({
         default: "faculty"
     },
 
-    createdBy:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"userModel",
+    createdBy: {
+        type: mongoose.Schema.Types.Mixed,
+        ref: "userModel",
         required: true
     },
 
-    updatedAt:{
+    createdAt: {
         type: Date,
         default: Date.now,
     },
 
-    createdAt:{
+    updatedAt: {
         type: Date,
         default: Date.now,
+    },
+
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+
+    deletedAt: {
+        type: Date,
+        default: null
     }
-},{
+}, {
     timestamps: true
 })
 
@@ -121,7 +138,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('validate', function (next) {
     const emailRegex = /^\S+@\S+\.\S+$/;
 
-    for (let email of this.emails) {
+    for (let email of this.email) {
         if (!emailRegex.test(email)) {
             return next(new Error(`Invalid email format: ${email}`));
         }
@@ -132,7 +149,7 @@ userSchema.pre('validate', function (next) {
 
 // Mongoose pre hook to validate 10-digit mobile numbers
 userSchema.pre('validate', function (next) {
-    for (let phone of this.phones) {
+    for (let phone of this.phone) {
         const numStr = phone.mobileNumber?.toString();
         if (!numStr || !/^\d{10}$/.test(numStr)) {
             return next(new Error(`Invalid mobile number: ${phone.mobileNumber}`));
@@ -142,10 +159,15 @@ userSchema.pre('validate', function (next) {
 });
 
 // mongoose pre hook for automatic password setup
-userSchema.pre('save', async function(next){
-    if (!this.password && this.isNew){
+userSchema.pre('save', async function (next) {
+    if (!this.password && this.isNew) {
 
-        const password = cryptoRandomString({length: 10, type: 'alphanumeric'});
+        const password = cryptoRandomString({ length: 10, type: 'alphanumeric' });
+
+        // save this password in redis for a short preod of time
+        await redisConnect.set(this.email.toString(), password, { EX: 120 });
+
+        // hash and save the password in mongo now
         const hashedPassword = await bcrypt.hash(password, 10);
         this.password = hashedPassword;
 
