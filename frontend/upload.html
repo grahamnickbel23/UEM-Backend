@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Data Upload</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload User Data</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <!-- Name -->
+            <div class="form-group">
+                <input type="text" name="firstName" placeholder="First Name">
+                <input type="text" name="middleName" placeholder="Middle Name">
+                <input type="text" name="lastName" placeholder="Last Name">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <input type="email" name="email[]" placeholder="Email" required>
+            </div>
+
+            <!-- Phone -->
+            <div class="form-group">
+                <input type="number" name="phone[0][countryCode]" placeholder="Country Code" value="91" required>
+                <input type="number" name="phone[0][mobileNumber]" placeholder="Mobile Number" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <select name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-say">Prefer not to say</option>
+                </select>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+                <input type="date" name="date_of_birth">
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <input type="text" name="address[0][address_line_one]" placeholder="Address Line 1" required>
+                <input type="text" name="address[0][address_line_two]" placeholder="Address Line 2">
+                <input type="text" name="address[0][address_line_three]" placeholder="Address Line 3">
+                <input type="text" name="address[0][district]" placeholder="District" required>
+                <input type="text" name="address[0][state]" placeholder="State" value="West Bengal">
+                <input type="text" name="address[0][country]" placeholder="Country" value="India">
+            </div>
+
+            <!-- Employee Details -->
+            <div class="form-group">
+                <input type="text" name="employeeId" placeholder="Employee ID" required>
+                <input type="text" name="department" placeholder="Department">
+                <select name="role">
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <!-- Links -->
+            <div class="form-group">
+                <input type="url" name="githubURL" placeholder="GitHub URL">
+                <input type="url" name="linkdinURL" placeholder="LinkedIn URL">
+            </div>
+
+            <!-- Achievements -->
+            <div class="form-group">
+                <input type="text" name="achivementSchema[0][title]" placeholder="Achievement Title">
+                <input type="url" name="achivementSchema[0][url]" placeholder="Achievement URL">
+            </div>
+
+            <!-- File Uploads -->
+            <div class="form-group">
+                <label>Profile Picture:</label>
+                <input type="file" name="profilePic" accept="image/*">
+            </div>
+            <div class="form-group">
+                <label>ID Card:</label>
+                <input type="file" name="idCard" accept="image/*,application/pdf">
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="scripts.js"></script>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Form submitted! Backend integration pending.');
+            // Here you will handle sending the form data to your backend using fetch or Axios
+        });
+    </script>
+</body>
+</html>

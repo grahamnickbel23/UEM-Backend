@@ -1,0 +1,11 @@
+# Except these folders
+/backend/log
+/backend-new
+/backend-new-02
+/backend-old
+/database
+/nginx
+
+# (Optional) ignore node_modules inside them
+/backend/node_modules/
+/frontend/node_modules/

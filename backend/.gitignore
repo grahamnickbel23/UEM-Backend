@@ -1,54 +1,74 @@
-# Node modules
+# =========================
+# Node + Package Managers
+# =========================
 node_modules/
+.npm/
+.yarn/
 
+# =========================
 # Logs
-logs/
-*.log
+# =========================
+/log/                 # only root-level log folder
+*.log                 # ignore plain .log files
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# dotenv environment variables
+# Keep logger source files (even if they look like logs)
+!src/logger/
+!src/logger/*.js
+
+# =========================
+# Uploads
+# =========================
+/uploads/             # only root-level uploads folder
+
+# =========================
+# Environment files
+# =========================
 .env
 .env.*.local
 
-# OS generated files
+# =========================
+# Build + Coverage
+# =========================
+dist/
+build/
+coverage/
+
+# =========================
+# IDE + System files
+# =========================
+.vscode/
+.idea/
 .DS_Store
 Thumbs.db
 
-# Optional npm cache
-.npm/
-
-# Optional Yarn cache
-.yarn/
-
-# Build output
-dist/
-build/
-
-# IDE files
-.vscode/
-.idea/
-
-# Coverage reports
-coverage/
-
-# PM2 logs
+# =========================
+# Process + DB
+# =========================
 pids
 *.pid
 *.seed
 *.pid.lock
+dump/                 # MongoDB dump files
 
-# MongoDB dump files
-dump/
-
+# =========================
 # Misc
+# =========================
 *.tgz
 *.bak
 *.swp
 *.swo
 *.tmp
 
-# TypeScript compiled output (if using TypeScript)
+# =========================
+# TypeScript
+# =========================
 *.tsbuildinfo
 tsconfig.tsbuildinfo
+
+# =========================
+# Custom (local addition)
+# =========================
+/backend
