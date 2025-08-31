@@ -7,7 +7,7 @@ export default async function apiKey(req, res, next){
     const serverKey = process.env.API_KEY; 
 
     // cheal api keys
-    if (clientKey === serverKey){
+    if (req.path === '/metrics' || clientKey === serverKey){
         return next();
     }
 
