@@ -1,6 +1,6 @@
 import userSchema from "../../models/userSchema.js";
 import genaralResponse from "../../utils/genaralResponse utils.js";
-import sendEmail from "../notification/send email.js";
+import { emailQueue } from "../../quene/genaral quene.js";
 import emailUpdate from "../../utils/emailUpdate utils.js";
 import admin from "../../middelewere/adminAuth secure.js";
 import bcrypt from 'bcrypt';
@@ -45,13 +45,19 @@ export default class editAuth {
         if (fieldName != 'password') {
 
             if (doesUpdateSuccesful[fieldName] == info) {
-                await sendEmail.alertEmailUpdate(data.email, fieldName);
+                await emailQueue.add( "alertEmailUpdate", {
+                    id: req.requestId, 
+                    email: data.email, 
+                    fieldChanged: fieldName})
             };
 
         } else {
 
             if (doesUpdateSuccesful.password != data.password) {
-                await sendEmail.alertEmailUpdate(data.email, fieldName);
+                await emailQueue.add( "alertEmailUpdate", {
+                    id: req.requestId, 
+                    email: data.email, 
+                    fieldChanged: fieldName})
             };
 
         }

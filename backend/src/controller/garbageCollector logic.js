@@ -1,5 +1,6 @@
 import userSchema from "../models/userSchema.js";
 import achivementSchema from "../models/achivementSchema.js";
+import logSchema from "../models/logSchema.js";
 import logger from "../logger/log logger.js";
 
 export default class garbageCollector {
@@ -55,6 +56,26 @@ export default class garbageCollector {
             logger.info(`Garbage Collector: Permanently deleted ${deletedDocIds.length} doc(s)`)
         } catch (err) {
             logger.error("Error while deleting documents:", err)
+        }
+    }
+
+    // delete logs older than 10 days
+    static async deleteLogs() {
+        try {
+            const tenDaysAgo = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000);
+
+            const result = await logSchema.deleteMany({
+                timestamp: { $lte: tenDaysAgo }
+            });
+
+            if (result.deletedCount === 0) {
+                logger.info("Garbage Collector: No old logs to delete");
+                return;
+            }
+
+            logger.info(`Garbage Collector: Deleted ${result.deletedCount} old log(s)`);
+        } catch (err) {
+            logger.error("Error while deleting old logs:", err);
         }
     }
 }

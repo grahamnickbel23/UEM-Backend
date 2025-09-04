@@ -1,5 +1,5 @@
 import cryptoRandomString from "crypto-random-string";
-import sendEmail from "../notification/send email.js";
+import { emailQueue } from "../../quene/genaral quene.js";
 import userSchema from "../../models/userSchema.js";
 import genaralResponse from "../../utils/genaralResponse utils.js";
 import tokenAndCookies from "../../utils/tokenAndCookies utils.js";
@@ -25,12 +25,18 @@ export default class otpVerification {
         await redisConnect.set(email, hashedOTP, { EX: 120 });
 
         // send the otp to the user
-        await sendEmail.deliveryOTP(email, genarateOTP);
+        const job = await emailQueue.add("deliveryOTP", {
+            id: req.requestId, 
+            email: email, 
+            otp: genarateOTP
+        })
 
         // create a log
         logger.info(`${req.requestId} 
             input: ${ email }
-            SEND_OTP was sucessful `)
+            OTP_SEND Sucessfully
+            added to QUENE 
+            job id: ${job.id}`)
 
         // if all ok send ok
         genaralResponse.genaral200Response("send otp sucessfuly", res);

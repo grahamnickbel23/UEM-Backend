@@ -2,7 +2,7 @@ import { createClient } from "redis";
 import logger from "./src/logger/log logger.js";
 
 export const redisConnect = createClient({
-    url: "redis://redis:6379"
+    url: "redis://localhost:6379"
 })
 
 export async function connectRedis() {

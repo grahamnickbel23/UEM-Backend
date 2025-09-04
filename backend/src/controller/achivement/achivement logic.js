@@ -2,7 +2,7 @@ import achivementSchema from "../../models/achivementSchema.js";
 import localAuth from "../../utils/localAuth utils.js";
 import achivementFnc from "../../utils/achivementFile utils.js";
 import AWSServices from "../../utils/aws utils.js";
-import sendEmail from "../notification/send email.js";
+import { emailQueue } from "../../quene/genaral quene.js";
 import genaralResponse from "../../utils/genaralResponse utils.js";
 import userSchema from "../../models/userSchema.js";
 import logger from "../../logger/log logger.js";
@@ -48,17 +48,23 @@ export default class achivementController {
         await newData.save();
 
         // send user an alert email after achivement creation is succesful
-        await sendEmail.achievementAddedEmail(
-            doesUserExisit.email[0],
-            doesUserExisit.firstName,
-            data.title,
-            data.achivementType
-        )
+        const achivementJob = await emailQueue.add("achievementAddedEmail", {
+            id: req.requestId,
+            email : doesUserExisit.email[0],
+            username : doesUserExisit.firstName,
+            achievementTitle : data.title,
+            achievementType : data.achivementType
+        })
 
         // create a log
         logger.info(`${req.requestId} 
             input: ${data, creatorId}
-            DOC_CREATION was sucessful 
+            ADDED_QUENE was sucessfull
+            job id: ${achivementJob.id}`)
+
+        logger.info(`${req.requestId} 
+            input: ${data, creatorId}
+            DOC_CREATION was sucessfully
             return: ${newData._id}`)
 
         // return ok if all ok
@@ -133,14 +139,20 @@ export default class achivementController {
         if (!(deletedDocument.isDeleted && deletedDocument.deletedAt)) return;
 
         // notify user via email about deletion
-        await sendEmail.achievementDeletedEmail(
-            userData.email[0],
-            userData.firstName,
-            doesDocExisit.title,
-            doesDocExisit.achivementType
-        )
+        const job = await emailQueue.add("achievementDeletedEmail", {
+            id: req.requestId,
+            email : userData.email[0],
+            username : userData.firstName,
+            achievementTitle : doesDocExisit.title,
+            achievementType : doesDocExisit.achivementType
+        })
 
         // create a log
+        logger.info(`${req.requestId} 
+            input: ${userId, doesDocExisit._id}
+            ADDED_QUENE was successful
+            job id: ${job.id}`)
+
         logger.info(`${req.requestId} 
             input: ${userId, doesDocExisit._id}
             DOC_DELETE was sucessful`)

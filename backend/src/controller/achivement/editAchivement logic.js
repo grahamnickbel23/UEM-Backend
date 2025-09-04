@@ -2,6 +2,7 @@ import achivementSchema from "../../models/achivementSchema.js";
 import AWSServices from "../../utils/aws utils.js";
 import localAuth from "../../utils/localAuth utils.js";
 import getMetaData from "../../utils/metadata utils.js";
+import { fileCleanupQueue } from "../../quene/genaral quene.js";
 import logger from "../../logger/log logger.js";
 
 export default class editAchivement {
@@ -48,6 +49,9 @@ export default class editAchivement {
 
         // save doc after updating
         await doesDocExisit.save();
+
+        // remove file from quene
+        await fileCleanupQueue.removeJobs(`deleteFile`);
 
         // create a log
         logger.info(`${req.requestId} 

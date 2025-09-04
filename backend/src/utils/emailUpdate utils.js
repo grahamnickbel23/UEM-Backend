@@ -1,7 +1,7 @@
 import userSchema from "../models/userSchema.js";
-import { redisConnect } from "../../connectRedis.js";
-import sendEmail from "../controller/notification/send email.js";
-import adminInfoEmail from "../controller/notification/admin email.js";
+import { redisConnect } from "../../connectRedis.js"
+import { emailQueue } from "../quene/genaral quene.js";
+
 import logger from "../logger/log logger.js";
 
 export default class emailUpdate {
@@ -30,10 +30,18 @@ export default class emailUpdate {
         const info = { email, password: plainPassword };
 
         // send email to the account holder
-        await sendEmail.congratEmail(email, info);
+        const userJob = await emailQueue.add("congratEmail", { 
+            id: req.requestId, 
+            email, info });
 
         // semd email to admin 
-        await adminInfoEmail(adminEmail, email, userInfo);
+        const adminJob = await emailQueue.add("adminInfoEmail", {
+            id: req.requestId, 
+            adminEmail,
+            userEmail: email,
+            info: userInfo
+        });
+
 
         // genarate log after sucessful execution
         let passd = null;
@@ -41,21 +49,31 @@ export default class emailUpdate {
 
         logger.info(`${req.requestId} 
             input: ${email, passd, adminEmail}
-            UPDATE_EMAIL was sucessful `)
+            UPDATE_EMAIL was sucessfully 
+            added to QUENE
+            user job id: ${userJob.id}
+            admin job id: ${adminJob.id}`)
     };
 
     // update for user deleting
-    static async deletedAccountUpdate(req, userEmail, adminEmail){
+    static async deletedAccountUpdate(req, userEmail, adminEmail) {
 
         // send email to the user who's account been deleted
-        await sendEmail.accountDeletedEmail(userEmail);
+        const userJob = await emailQueue.add("accountDeletedEmail", { 
+            id: req.requestId, 
+            email: userEmail });
 
         // send email to the admin who delete the user
-        await sendEmail.accountDeletedAdminEmail(userEmail, adminEmail);
+        const adminJob = await emailQueue.add("accountDeletedAdminEmail", { 
+            id: req.requestId, 
+            userEmail, adminEmail })
 
         // genarate log after sucessful execution
         logger.info(`${req.requestId} 
             input: ${userEmail, adminEmail} 
-            UPDATE_EMAIL was sucessful `)
+            UPDATE_EMAIL was sucessfully 
+            added to QUENE
+            user job id: ${userJob.id}
+            admin job id: ${adminJob.id}`)
     }
 }

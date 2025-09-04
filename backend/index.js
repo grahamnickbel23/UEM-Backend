@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import cron from "node-cron";
 import cryptoRandomString from 'crypto-random-string';
+import { Worker as ThreadWorker } from "worker_threads";
 import mongoDBConnect from './connectMongoDB.js';
 import jwtPerser from './src/middelewere/jwtPerser secure.js'
 import apiKey from './src/middelewere/apiKey secure.js';
@@ -15,9 +16,11 @@ import { connectRedis } from './connectRedis.js';
 import logger from './src/logger/log logger.js';
 import authRoute from './src/routes/auth route.js';
 import achivementRoute from './src/routes/achivement route.js';
+import createTopics from './src/kafka/admin kafka.js';
+import startConsumer from './src/kafka/consumer kafka.js';
 import enhancedLogger from './src/logger/enhanced logger.js';
 import { setContext } from "./src/logger/context logger.js";
-import garbageCollector from './src/controller/garbageCollector logic.js';
+import { cornQuene } from './src/quene/genaral quene.js';
 
 const app = express();
 
@@ -35,7 +38,7 @@ const corsOptions = {
     origin: 'http://127.0.0.1:5500',
     methods: 'GET,POST',
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true                  
+    credentials: true
 };
 
 // Use CORS middleware with specified options
@@ -49,14 +52,19 @@ const PORT = process.env.PORT;
 connectRedis();
 mongoDBConnect();
 
+// spawn BullMQ worker in a separate thread
+new ThreadWorker("./src/quene/emailWorker quene.js");
+new ThreadWorker("./src/quene/cornWorker quene.js");
+new ThreadWorker("./src/quene/fileCleanupWorker quene.js")
+
 // api path
 app.use("/auth", authRoute);
 app.use('/achivement', achivementRoute);
 
 // Metrics endpoint
 app.get('/metrics', async (req, res) => {
-  res.set('Content-Type', register.contentType);
-  res.end(await register.metrics());
+    res.set('Content-Type', register.contentType);
+    res.end(await register.metrics());
 });
 
 // basic api path
@@ -71,20 +79,31 @@ app.get("/home", (req, res) => {
 // run once every hour (at minute 0)
 cron.schedule("0 * * * *", async () => {
 
-    const jobId = await cryptoRandomString({length: 10, type: 'numeric'});
+    const jobId = await cryptoRandomString({ length: 10, type: 'numeric' });
 
     // set context here
     setContext({ requestId: jobId, type: "job", jobName: "garbage-collector" });
 
     logger.info(`${jobId} Running garbage collector...`);
-    await garbageCollector.deleteAccounts();
-    await garbageCollector.deleteDocs();
+    await cornQuene.add("deletedAccount");
+    await cornQuene.add("deletedDoc");
+    await cornQuene.add("deleteLogs");
 });
 
 // ---- Server Startup ----
-app.listen(PORT, () => {
-    enhancedLogger.appStart(`Server is running on port: ${PORT}`);
-});
+createTopics()
+  .then(() => {
+    return startConsumer();
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      enhancedLogger.appStart(PORT, process.env.NODE_ENV || "development");
+    });
+  })
+  .catch((err) => {
+    logger.error("Fatal error during startup", err);
+    process.exit(1);
+  });
 
 // ---- Graceful Shutdown ----
 process.on("SIGINT", async () => {
