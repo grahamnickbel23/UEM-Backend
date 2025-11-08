@@ -1,0 +1,53 @@
+# =========================
+# Node + Package Managers
+# =========================
+node_modules/
+.npm/
+.yarn/
+
+# =========================
+# Logs
+# =========================
+/log
+
+# =========================
+# Environment files
+# =========================
+.env
+
+# =========================
+# IDE + System files
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# Process + DB
+# =========================
+pids
+*.pid
+*.seed
+*.pid.lock
+dump/                 # MongoDB dump files
+
+# =========================
+# Misc
+# =========================
+*.tgz
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# =========================
+# TypeScript
+# =========================
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# =========================
+# Custom (local addition)
+# =========================
+/uploads
