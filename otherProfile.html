@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile page</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style3.css">
+</head>
+
+<body>
+    <!--header portion-->
+    <header class="header">
+        <a href="profile.html">
+            <figure class="logo left">
+                <img src="./assets/UEMKolkata.png" alt="UEM Logo" />
+            </figure>
+        </a>
+
+        <div class="mid-heading">
+            <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search..." />
+                <button id="search-btn">🔍</button>
+                <ul id="search-suggestions" class="suggestions"></ul>
+            </div>
+        </div>
+
+        <a href="profile.html">
+            <figure class="logo right">
+                <img src="./assets/IEMKolkata.png" alt="IEM Logo" />
+            </figure>
+        </a>
+    </header>
+
+    <!--profile & achivement section-->
+    <div class="main-container">
+        <!-- profile div -->
+        <div class="profile">
+
+            <div class="cover-pic">
+                <!--profile image-->
+                <!-- <div class="profile-pic">
+                    <img id="profile-img" src="assets\Screenshot 2025-10-04 190523.png" alt="profile Imahe">
+                </div> -->
+
+                <div class="profile-pic">
+                    <img id="profile-img" src="#" alt="Profile Image">
+                    <div id="profile-initials" class="profile-initials"></div>
+                </div>
+
+                <!--desgination-->
+                <div class="designation">
+                    <p id="profile-dept">Dept CST-CSIT</p>
+                </div>
+
+                <!-- Hidden full-screen view -->
+                <div id="image-viewer" class="image-viewer">
+                    <span class="close">&times;</span>
+                    <img class="viewer-img" id="viewer-img" src="" alt="Full View">
+                </div>
+            </div>
+
+            <!--prodile name-->
+            <div class="profile-name">
+                <p class="profile-name-info" id="profile-name">Dipan Lahiri</p>
+                <p class="profile-gender" id="profile-gender"> she / her </p>
+                <p class="profile-gender" id="profile-role">Admin</p>
+            </div>
+
+            <!--other info-->
+            <div class="profile-info">
+
+                <div class="profile-info-row"></div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Employee ID:</span>
+                    <span class="profile-info-value" id="employee-id">025896</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Email:</span>
+                    <span class="profile-info-value" id="email">dipanlahiriofficial@gmail.com</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Phone No:</span>
+                    <span class="profile-info-value" id="phone">+91 9126375827</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Date of Birth:</span>
+                    <span class="profile-info-value" id="date-of-birth">16th October 1975</span>
+                </div>
+
+                <div class="profile-info-row"></div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Adress line One:</span>
+                    <span class="profile-info-value" id="address-line1">D343 / 401</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Adress line Two:</span>
+                    <span class="profile-info-value" id="address-line2">Shapoorji Palonji Hoising Complex</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Adress line Three:</span>
+                    <span class="profile-info-value" id="address-line3">NewTown</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">District:</span>
+                    <span class="profile-info-value" id="district">North 24th Pargana</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">State:</span>
+                    <span class="profile-info-value" id="state">West Bengal</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Country:</span>
+                    <span class="profile-info-value" id="country">India</span>
+                </div>
+
+                <div class="profile-info-row"></div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Created By:</span>
+                    <span class="profile-info-value" id="created-by">Dipan Lahiri</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Created At:</span>
+                    <span class="profile-info-value" id="created-at">14:48 8th October 2025</span>
+                </div>
+
+                <div class="profile-info-row">
+                    <span class="profile-info-label">Last login:</span>
+                    <span class="profile-info-value" id="updated-at">17:52 9th October 2025</span>
+                </div>
+
+                <div class="profile-icon-container">
+                    <div class="profile-info-footer">
+                        <a href="#" id="github-link"><img src="assets/github-icon.png" alt="GitHub"
+                                class="profile-icon"></a>
+                    </div>
+
+                    <div class="profile-info-footer">
+                        <a href="#" id="linkedin-link"><img src="assets\linkedin.png" alt="linkedin"
+                                class="profile-icon"></a>
+                    </div>
+                </div>
+
+                <div class="profile-info-row"></div>
+            </div>
+        </div>
+
+        <!--achivement div-->
+        <div class="achivement">
+
+            <!-- heading-->
+            <a href="otherAchivement.html" class="achivement-heading">
+                <div>
+                    <div class="achivement-heading-info">
+                        <p>Achivement</p>
+                    </div>
+                </div>
+            </a>
+
+            <!--space-->
+            <div class="profile-info-row"></div>
+
+            <!-- compact view -->
+            <div class="achivement-summary" id="achievements-container"></div>
+
+            <!-- Overlay Modal -->
+            <div id="achievement-overlay" class="achievement-overlay">
+                <div class="achievement-modal">
+                    <span id="close-overlay" class="close-btn">&times;</span>
+                    <h1 id="overlay-title">Achievement Title</h1>
+                    <p><strong>Organizer:</strong> <span id="overlay-organizer"></span></p>
+                    <p><strong>Location:</strong> <span id="overlay-location"></span></p>
+                    <p><strong>Status:</strong> <span id="overlay-status"></span></p>
+                    <p><strong>Identification No:</strong> <span id="overlay-id"></span></p>
+                    <p><strong>Description:</strong> <span id="overlay-desc"></span></p>
+                    <a id="overlay-doc" href="#">📄 View Document</a>
+                </div>
+            </div>
+        </div>
+
+        <script src="/script.js"></script>
+        <script src="/script8.js"></script>
+        <script src="/script4.js"></script>
+        <script src="/script7.js"></script>
+</body>
+
+</html>

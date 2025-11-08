@@ -1,0 +1,64 @@
+/* Edit icon styling */
+.edit-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  font-size: 16px;
+}
+
+.profile-info-row:hover .edit-icon {
+  opacity: 1;
+}
+
+/* Popup overlay */
+.edit-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  z-index: 2000;
+  width: 320px;
+  display: none;
+  animation: fadeIn 0.2s ease forwards;
+}
+
+.edit-popup.active {
+  display: block;
+}
+
+.edit-popup input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  margin-bottom: 15px;
+}
+
+.popup-buttons {
+  text-align: right;
+}
+
+.popup-buttons button {
+  padding: 6px 12px;
+  margin-left: 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

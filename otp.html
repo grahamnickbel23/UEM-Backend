@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Verification</title>
+  <link rel="stylesheet" href="style2.css">
+</head>
+<body>
+  <header class="header">
+    <figure class="logo left">
+      <img src="./assets/UEMKolkata.png" alt="UEM Logo">
+    </figure>
+
+    <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+
+    <figure class="logo right">
+      <img src="./assets/IEMKolkata.png" alt="IEM Logo">
+    </figure>
+  </header>
+
+  <div class="login-container">
+    <h2>OTP Verification</h2>
+
+    <form id="otpForm">
+      <input type="text" id="otp" class="cred-box" autofocus placeholder="Enter OTP" required>
+
+      <!-- Verify Button -->
+      <button id="verifyBtn" class="submit-btn" type="submit">Verify OTP</button>
+
+      <!-- Timer + Resend Button -->
+      <div id="otpActions">
+        <p id="timer" class="timer"></p>
+        <button id="resendBtn" class="submit-btn hidden" type="button">Get Another OTP</button>
+      </div>
+    </form>
+
+    <p id="otpMessage" class="message"></p>
+  </div>
+
+  <script src="otp.js"></script>
+  <script src="script2.js"></script>
+</body>
+</html>

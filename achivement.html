@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievement</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style4.css">
+</head>
+
+<body>
+    <!--header portion-->
+    <header class="header">
+        <a href="profile.html">
+            <figure class="logo left">
+                <img src="./assets/UEMKolkata.png" alt="UEM Logo" />
+            </figure>
+        </a>
+
+        <div class="mid-heading">
+            <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+        </div>
+
+        <a href="profile.html">
+            <figure class="logo right">
+                <img src="./assets/IEMKolkata.png" alt="IEM Logo" />
+            </figure>
+        </a>
+    </header>
+
+    <!--main portion-->
+    <div class="achivement-main">
+        <!--side profile-->
+        <div class="achivement-profile">
+            <a href="profile.html" class="achivement-profile-a">
+
+                <div class="profile-pic">
+                    <img id="profile-img" src="#" alt="Profile Image">
+                    <div id="profile-initials" class="profile-initials"></div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Name:</span>
+                        <span id="profile-name" class="profile-info-value">Graham Mondal</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Department:</span>
+                        <span id="profile-dept" class="profile-info-value">CSE</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Employee ID:</span>
+                        <span id="employee-id" class="profile-info-value">3rd Year</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Created At:</span>
+                        <span id="created-at" class="profile-info-value">D343 / 401</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Logged In:</span>
+                        <span id="updated-at" class="profile-info-value">Shapoorji Palonji Housing Complex</span>
+                    </div>
+                </div>
+            </a>
+
+            <!--overlay to add achivement-->
+            <button id="openOverlayBtn" class="add-achivement">Add Achivement</button>
+
+            <div class="overlay" id="myOverlay">
+                <div class="overlay-content">
+                    <button id="closeOverlayBtn" class="close-overlay">&times;</button>
+                    <h1>Add Achivement</h1>
+                    <form id="uploadAchivementForm" enctype="multipart/form-data">
+
+                        <!-- Achievement Type -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achivementType" class="achivement-edit-form-label">Achievement Type</label>
+                            <select id="achivementType" name="achivementType" class="achivement-edit-form-label"
+                                required>
+                                <option value="">Select an Option</option>
+                                <option value="degree">Degree</option>
+                                <option value="book">Book</option>
+                                <option value="talk">Talk</option>
+                                <option value="certification">Certification</option>
+                                <option value="patent">Patent</option>
+                                <option value="publication">Publication</option>
+                                <option value="awards">Awards</option>
+                            </select>
+                        </div>
+
+                        <!-- Title -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achievementName" class="achivement-edit-form-label">Title</label>
+                            <input type="text" id="achievementName" name="title" placeholder="Ex: IEEE Research Paper"
+                                required class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achievementDetails" class="achivement-edit-form-label"
+                                style="display:block; font-weight:600; margin-bottom:5px;">Description</label>
+                            <textarea id="achievementDetails" name="description" placeholder="Brief description"
+                                rows="5"
+                                style="width: 100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:1rem; resize:vertical;"></textarea>
+                        </div>
+
+                        <!-- Organizer -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achivementOrganiser" class="achivement-edit-form-label">Organizer</label>
+                            <input type="text" id="achivementOrganiser" name="organizer" placeholder="Ex: IEEE"
+                                class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Location -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achivementLocation" class="achivement-edit-form-label">Location</label>
+                            <input type="text" id="achivementLocation" name="location" placeholder="Ex: Kolkata, India"
+                                class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Identification Number -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achivementIdentificationNo" class="achivement-edit-form-label">Identification
+                                No</label>
+                            <input type="text" id="achivementIdentificationNo" name="identification_number"
+                                placeholder="Ex: ISBN658930" class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Current Status -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="achivementCurrentStatus" class="achivement-edit-form-label">Current
+                                Status</label>
+                            <input type="text" id="achivementCurrentStatus" name="currentStatus"
+                                placeholder="Ex: Published" class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Event Date -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="eventDate" class="achivement-edit-form-label">Event Date</label>
+                            <input type="date" id="eventDate" name="eventDate" class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Achievement Images -->
+                        <div class="form-group">
+                            <label for="achivementImage" class="achivement-edit-form-label">Achievement Images</label>
+                            <input type="file" id="achivementImage" name="images" accept="image/*" multiple
+                                class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Achievement Docs -->
+                        <div class="form-group">
+                            <label for="achivementDoc" class="achivement-edit-form-label">Achievement Documents</label>
+                            <input type="file" id="achivementDoc" name="doc" accept="application/pdf" multiple
+                                class="achivement-edit-form" />
+                        </div>
+
+                        <!-- Extra Info (optional JSON) -->
+                        <div class="form-group" style="margin-bottom: 15px;">
+                            <label for="extra" class="achivement-edit-form-label">Extra Info (JSON format)</label>
+                            <textarea id="extra" name="extra" rows="3" placeholder='{"key":"value"}'
+                                style="width: 100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:1rem; resize:vertical;"></textarea>
+                        </div>
+
+                        <button type="submit" class="add-achivement">Submit</button>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+
+        <!--main achievement section-->
+        <div class="achivement-list" id="achievements-container"></div>
+
+        <!-- Overlay Modal -->
+        <div id="achievement-overlay" class="achievement-overlay">
+            <div class="achievement-modal">
+                <span id="close-overlay" class="close-btn">&times;</span>
+                <h1 id="overlay-title">Achievement Title</h1>
+                <p><strong>Type:</strong> <span id="overlay-type"></span></p>
+                <p><strong>Organizer:</strong> <span id="overlay-organizer"></span></p>
+                <p><strong>Location:</strong> <span id="overlay-location"></span></p>
+                <p><strong>Status:</strong> <span id="overlay-status"></span></p>
+                <p><strong>Identification No:</strong> <span id="overlay-id"></span></p>
+                <p><strong>Event Date:</strong> <span id="overlay-date"></span></p>
+                <p><strong>Created By:</strong> <span id="overlay-creator"></span></p>
+                <p><strong>Description:</strong> <span id="overlay-desc"></span></p>
+                <a id="overlay-doc" href="#">📄 Delete Document</a>
+            </div>
+        </div>
+    </div>
+
+    <!--JS can go here-->
+    <script src="script6.js"></script>
+    <script src="script12.js"></script>
+    <script src="script5.js"></script>
+</body>
+
+</html>

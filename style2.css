@@ -1,0 +1,336 @@
+/* --------- GLOBAL STYLING --------- */
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+
+h1,
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #4f46e5;
+  margin-bottom: 20px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+/* --------- HEADER --------- */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 10px;
+  position: absolute;
+  top: 0;
+  width: 90%;
+  background-color: #ffffff;
+}
+
+.logo {
+  height: 100px;
+  width: 177px;
+  display: flex;
+  align-items: center;
+}
+
+.logo.left {
+  justify-content: flex-start;
+}
+.logo.right {
+  justify-content: flex-end;
+}
+
+.header img {
+  height: 60px;
+}
+
+/* --------- ADMIN PROFILE --------- */
+.admin-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 2;
+  font-size: 20px;
+  gap: 20px;
+  background: #fff;
+  padding: 2%;
+  border-radius: 12px;
+  margin-top: 100px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  height: 40rem;
+  width: 95%;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-gap: 15px;
+  padding: 15px;
+  flex-grow: 1;
+}
+
+.admin-profile img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px solid #444;
+  position: absolute;
+  top: 30%;
+}
+
+.admin-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.admin-info h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+.admin-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+/* --------- LOGIN & OTP --------- */
+.login-container {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  width: 340px;
+  text-align: center;
+  transition: transform 0.2s ease;
+
+  /* Fix alignment */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container:hover {
+  transform: translateY(-3px);
+}
+
+.login-container h2 {
+  color: #222;
+  font-weight: 600;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 15px;
+  transition: 0.2s;
+}
+
+.login-container input:focus {
+  border-color: #3933b2;
+  box-shadow: 0 0 6px rgba(79, 70, 229, 0.3);
+  outline: none;
+}
+
+.cred-box{
+  min-width: 250px;
+}
+
+.submit-btn {
+  width: 80%;
+  padding: 10px;
+  margin-top: 10px;
+  background: linear-gradient(90deg, #271ec9, #271ec9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(90deg, #4338ca, #4f46e5);
+  transform: scale(1.02);
+}
+
+.hidden {
+  display: none;
+}
+
+.timer {
+  margin-top: 10px;
+  color: #4f46e5;
+  font-weight: 500;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+/* --------- UPLOAD PAGE --------- */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f4f7f8;
+  margin: 0;
+  padding: 0;
+}
+
+/* Container for the form */
+.container {
+  background: #fff;
+  padding: 40px;
+  border-radius: 16px;
+  max-width: 900px;
+  margin: 80px auto;
+  margin-top: 225px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.container:hover {
+  transform: translateY(-2px);
+}
+
+.container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+  font-weight: 700;
+}
+
+/* Form Layout */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Group inputs horizontally */
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Input & select styles */
+.form-group input,
+.form-group select,
+.form-group label {
+  font-size: 16px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="url"],
+.form-group select {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="url"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus {
+  border-color: #0073e6;
+  box-shadow: 0 0 5px rgba(0, 115, 230, 0.3);
+}
+
+/* File inputs */
+.form-group input[type="file"] {
+  flex: 1 1 48%;
+  padding: 8px;
+  border: 1px dashed #aaa;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: #0073e6;
+}
+
+/* Submit button */
+form button {
+  padding: 14px 24px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #0073e6, #005bb5);
+  color: #fff;
+  align-self: center;
+  transition: all 0.3s ease;
+}
+
+form button:hover {
+  background: linear-gradient(90deg, #005bb5, #003f7f);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 91, 181, 0.3);
+}
+
+.dynamic-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.dynamic-input-row input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  flex: 1;
+}
+
+.add-btn, .remove-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0073e6;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-btn:hover, .remove-btn:hover {
+  background-color: #005bb5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 950px) {
+  .container {
+    width: 90%;
+    margin: 60px auto;
+    padding: 30px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group input[type="file"] {
+    min-width: 100%;
+  }
+}

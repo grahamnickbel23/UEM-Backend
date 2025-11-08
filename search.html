@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievement</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style5.css">
+</head>
+
+<body>
+    <!--header portion-->
+    <header class="header">
+        <a href="profile.html">
+            <figure class="logo left">
+                <img src="./assets/UEMKolkata.png" alt="UEM Logo" />
+            </figure>
+        </a>
+
+        <div class="mid-heading">
+            <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+            <div class="search-container">
+                <input type="text" id="search-box" placeholder="Search..." />
+                <button id="search-btn">🔍</button>
+                <ul id="search-suggestions" class="suggestions"></ul>
+            </div>
+        </div>
+
+        <a href="profile.html">
+            <figure class="logo right">
+                <img src="./assets/IEMKolkata.png" alt="IEM Logo" />
+            </figure>
+        </a>
+    </header>
+
+    <!--main portion-->
+    <div class="achivement-main">
+        <!--side profile-->
+        <div class="achivement-profile">
+            <a href="profile.html" class="achivement-profile-a">
+
+                <div class="profile-pic">
+                    <img id="profile-img" src="#" alt="Profile Image">
+                    <div id="profile-initials" class="profile-initials"></div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Name:</span>
+                        <span id="profile-name" class="profile-info-value">Graham Mondal</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Department:</span>
+                        <span id="profile-dept" class="profile-info-value">CSE</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Employee ID:</span>
+                        <span id="employee-id" class="profile-info-value">3rd Year</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Created At:</span>
+                        <span id="created-at" class="profile-info-value">D343 / 401</span>
+                    </div>
+                    <div class="profile-info-row">
+                        <span class="profile-info-label">Logged In:</span>
+                        <span id="updated-at" class="profile-info-value">Shapoorji Palonji Housing Complex</span>
+                    </div>
+                </div>
+            </a>
+
+            <!--overlay to add achivement-->
+            <a href="upload.html">
+                <button id="openOverlayBtn" class="add-achivement">Add New user</button>
+            </a>
+
+            <!-- Download Info Button -->
+            <button id="downloadBtn" class="download-info">Download Info</button>
+
+        </div>
+
+        <!--All Users Section-->
+        <div class="search-user-list" id="user-list">
+            <!-- Users will be dynamically added here -->
+        </div>
+
+    </div>
+
+    <!-- Overlay -->
+    <div id="downloadOverlay" class="download-overlay">
+        <div class="download-modal">
+            <h2>Select Achievement Type</h2>
+            <form id="downloadForm">
+                <label for="achievementType">Type:</label>
+                <select id="achievementType" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option value="degree">Degree</option>
+                    <option value="book">Book</option>
+                    <option value="talk">Talk</option>
+                    <option value="certification">Certification</option>
+                    <option value="patent">Patent</option>
+                    <option value="publication">Publication</option>
+                    <option value="awards">Awards</option>
+                </select>
+
+                <label for="orderType">Order:</label>
+                <select id="orderType">
+                    <option value="decreasing" selected>Decreasing</option>
+                    <option value="increasing">Increasing</option>
+                </select>
+
+                <div class="download-buttons">
+                    <button type="submit" class="download-submit">⬇ Download</button>
+                    <button type="button" class="download-cancel">✖ Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!--JS can go here-->
+    <script src="script4.js"></script>
+    <script src="script6.js"></script>
+    <script src="script7.js"></script>
+    <script src="script9.js"></script>
+    <script src="script10.js"></script>
+</body>
+
+</html>

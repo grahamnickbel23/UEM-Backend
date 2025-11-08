@@ -1,0 +1,251 @@
+/* --- Main Achievement Layout --- */
+.achivement-main {
+  display: flex;
+  padding: 30px;
+  gap: 30px;
+  margin-top: 15px;
+  min-height: auto;
+}
+
+/* Left panel (Profile section) */
+.achivement-profile {
+  flex: 0 0 30%;
+  background-color: rgb(219, 169, 77);
+  border-radius: 20px;
+  min-width: 400px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s;
+}
+
+.achivement-profile:hover {
+  background-color: rgba(191, 37, 37, 0.681);
+}
+
+.achivement-profile-a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: inherit;
+}
+
+.profile-pic {
+  display: flex;
+  justify-items: center;
+}
+
+.profile-info {
+  margin-top: 15px;
+  background-color: wheat;
+}
+
+.profile-info-row {
+  margin-bottom: 10px;
+}
+
+.profile-info-label {
+  font-weight: 600;
+  display: block;
+}
+
+.profile-info-value {
+  font-size: 0.95rem;
+}
+
+.add-achivement {
+  position: relative;
+  min-height: 65px;
+  min-width: 100%;
+  margin-top: 25px;
+  border: 2px solid #fff;
+  border-radius: 15px;
+  font-size: 25px;
+  color: white;
+  background-color: #005fcc;
+}
+
+.add-achivement:hover {
+  cursor: pointer;
+  background-color: rgb(235, 100, 100);
+  transform: translateY(-5px);
+}
+
+/* Right panel (Achievements list) */
+.achivement-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+}
+
+.achivement-info-details {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  min-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.achivement-info-details:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.achivement-title {
+  color: #4338ca;
+  font-size: 30px;
+  margin-bottom: 8px;
+}
+
+.achivement-desc {
+  color: #333;
+  font-size: 15px;
+}
+
+.achievement-view-btn {
+  position: relative;
+  min-height: 35px;
+  min-width: 25%;
+  margin-top: 25px;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  font-size: 15px;
+  color: white;
+  background-color: #946d09;
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Input & select styles */
+.form-group input,
+.form-group select,
+.form-group label {
+  font-size: 16px;
+}
+
+.form-group select {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.achivement-edit-form {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.achivement-edit-form-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-group input[type="file"] {
+  flex: 1 1 48%;
+  padding: 8px;
+  border: 3px dashed #aaa;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: #0073e6;
+}
+
+/* Overlay container (hidden by default) */
+.overlay {
+  display: none;
+  /* ✅ start hidden */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  /* ✅ centers the content */
+  align-items: center;
+  z-index: 200;
+}
+
+/* Overlay visible state */
+.overlay.active {
+  display: flex;
+  /* ✅ show overlay as flex for centering */
+}
+
+/* Overlay content */
+.overlay-content {
+  position: relative;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Close button (X) */
+#closeOverlayBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  transition: 0.2s;
+}
+
+#closeOverlayBtn:hover {
+  color: #fff;
+  background-color: red;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+}
+
+/* Nice fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

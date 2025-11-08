@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Data Upload</title>
+    <link rel="stylesheet" href="style2.css" />
+</head>
+
+<body>
+    <!-- Header remains as is -->
+    <header class="header">
+        <a href="profile.html">
+            <figure class="logo left">
+            <img src="./assets/UEMKolkata.png" alt="UEM Logo">
+        </figure>
+        </a>
+
+        <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+
+        <a href="profile.html">
+            <figure class="logo right">
+            <img src="./assets/IEMKolkata.png" alt="IEM Logo">
+        </figure>
+        </a>
+    </header>
+
+    <div class="container">
+        <h1>Create New User</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+
+            <!-- Name -->
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Ex: Dipan" />
+            </div>
+
+            <div class="form-group">
+                <label for="middleName">Middle Name</label>
+                <input type="text" id="middleName" name="middleName" placeholder="Ex: Kumar" />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Ex: Lahiri" />
+            </div>
+
+            <!-- Emails Section -->
+            <div class="form-group dynamic-group" id="email-section">
+                <label>Emails</label>
+                <div class="dynamic-input-row">
+                    <input type="email" name="email" placeholder="Ex: user@example.com" required />
+                </div>
+            </div>
+
+            <!-- Phone Numbers Section -->
+            <div class="form-group" id="phone-section">
+                <label for="mobileNumber">Phone Number</label>
+                <div class="dynamic-input-row">
+                    <input type="number" name="countryCode" placeholder="Code" value="91"/>
+                    <input type="tel" name="mobileNumber" placeholder="Ex: 9126375827"/>
+                </div>
+            </div>
+
+            <!-- Password Section -->
+            <div class="form-group dynamic-group" id="email-section">
+                <label>Password</label>
+                <div class="dynamic-input-row">
+                    <input type="password" name="password" placeholder="Ex: lula@123" />
+                </div>
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="form-group">
+                <label for="dob">Date of Birth</label>
+                <input type="date" id="dob" name="date_of_birth" />
+            </div>
+
+            <!-- Gender -->
+            <div class="form-group">
+                <label for="gender">Gender</label>
+                <select id="gender" name="gender">
+                    <option value="">Select Gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                    <option value="prefer-not-say">Prefer not to say</option>
+                </select>
+            </div>
+
+            <!-- Address -->
+            <div class="form-group">
+                <label for="addressLine1">Address Line 1</label>
+                <input type="text" id="addressLine1" name="address[0][address_line_one]"
+                    placeholder="Ex: 123, ABC Street" />
+            </div>
+
+            <div class="form-group">
+                <label for="addressLine2">Address Line 2</label>
+                <input type="text" id="addressLine2" name="address[0][address_line_two]"
+                    placeholder="Ex: Building / Apartment" />
+            </div>
+
+            <div class="form-group">
+                <label for="addressLine3">Address Line 3</label>
+                <input type="text" id="addressLine3" name="address[0][address_line_three]"
+                    placeholder="Ex: Neighborhood" />
+            </div>
+
+            <div class="form-group">
+                <label for="district">District</label>
+                <input type="text" id="district" name="address[0][district]" placeholder="Ex: NewTown" />
+            </div>
+
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="address[0][state]" placeholder="Ex: West Bengal" />
+            </div>
+
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="address[0][country]" placeholder="Ex: India" />
+            </div>
+
+            <!-- Employee Details -->
+            <div class="form-group">
+                <label for="employeeId">Employee ID</label>
+                <input type="text" id="employeeId" name="employeeId" placeholder="Ex: 025896" required />
+            </div>
+
+            <div class="form-group">
+                <label for="department">Department</label>
+                <input type="text" id="department" name="department" placeholder="Ex: CST-CSIT" />
+            </div>
+
+            <div class="form-group">
+                <label for="role">Role</label>
+                <select id="role" name="role">
+                    <option value="faculty">Faculty</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+
+            <!-- Links -->
+            <div class="form-group">
+                <label for="githubURL">GitHub URL</label>
+                <input type="url" id="githubURL" name="githubURL" placeholder="Ex: https://github.com/username" />
+            </div>
+
+            <div class="form-group">
+                <label for="linkdinURL">LinkedIn URL</label>
+                <input type="url" id="linkdinURL" name="linkdinURL"
+                    placeholder="Ex: https://linkedin.com/in/username" />
+            </div>
+
+            <!-- File Uploads -->
+            <div class="form-group">
+                <label for="profilePic">Profile Picture</label>
+                <input type="file" id="profilePic" name="profileImage" accept="image/*" />
+            </div>
+
+            <div class="form-group">
+                <label for="idCard">ID Card</label>
+                <input type="file" id="idCard" name="idCard" accept="image/*,application/pdf" />
+            </div>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="/script5.js"></script>
+</body>
+
+</html>

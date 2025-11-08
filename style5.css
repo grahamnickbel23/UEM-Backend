@@ -1,0 +1,374 @@
+/* --- Main Achievement Layout --- */
+.achivement-main {
+    display: flex;
+    justify-content: space-between;
+    min-width: 1700px;
+    padding: 30px;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+/* Left panel (Profile section) */
+.achivement-profile {
+    flex: 0 0 30%;
+    max-width: 400px;
+    background-color: rgb(219, 169, 77);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s;
+}
+
+.achivement-profile:hover{
+    background-color: rgba(191, 37, 37, 0.681);
+}
+
+.achivement-profile-a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: inherit;
+}
+
+.profile-pic{
+    display: flex;
+    justify-items: center;
+}
+
+.profile-info {
+    margin-top: 15px;
+    background-color: wheat;
+}
+
+.profile-info-row {
+    margin-bottom: 10px;
+}
+
+.profile-info-label {
+    font-weight: 600;
+    display: block;
+}
+
+.profile-info-value {
+    font-size: 0.95rem;
+}
+
+.add-achivement{
+    position: relative;
+    min-height: 65px;
+    min-width: 100%;
+    margin-top: 25px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    font-size: 25px;
+    color: white;
+    background-color: #005fcc;
+}
+
+.add-achivement:hover{
+    cursor: pointer;
+    background-color: rgb(219, 169, 77);
+    transform: translateY(-5px);
+}
+
+.download-info{
+    position: relative;
+    min-height: 65px;
+    min-width: 100%;
+    margin-top: 25px;
+    border: 2px solid #fff;
+    border-radius: 15px;
+    font-size: 25px;
+    color: white;
+    background-color: #d325195b;
+}
+
+.download-info:hover{
+    cursor: pointer;
+    background-color: rgb(134, 62, 10);
+    transform: translateY(-5px);
+}
+
+/* Overlay background */
+.download-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.download-overlay.active {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal box - made bigger and more elegant */
+.download-modal {
+    background: rgb(219, 169, 77);
+    color: #3E2723;
+    padding: 40px 50px;
+    border-radius: 20px;
+    min-width: 500px;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Form styling */
+.download-modal h2 {
+    margin: 0;
+    font-size: 1.8em;
+    font-weight: 700;
+    text-align: center;
+    color: #2b1b17;
+}
+
+.download-modal label {
+    font-weight: 600;
+    font-size: 1.1em;
+    margin-bottom: 6px;
+    color: #2b1b17;
+}
+
+.download-modal select {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 2px solid #a66f2d;
+    font-size: 1.1em;
+    background: #fff8e1;
+    outline: none;
+    transition: border-color 0.25s ease;
+}
+
+.download-modal select:focus {
+    border-color: #3E2723;
+}
+
+/* Buttons */
+.download-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.download-submit,
+.download-cancel {
+    flex: 1;
+    padding: 14px 0;
+    border-radius: 10px;
+    border: none;
+    font-weight: 700;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.download-submit {
+    background: #3E2723;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.download-submit:hover {
+    background: #5a3b2f;
+    transform: translateY(-2px);
+}
+
+.download-cancel {
+    background: rgba(62, 39, 35, 0.15);
+    color: #3E2723;
+}
+
+.download-cancel:hover {
+    background: rgba(62, 39, 35, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Right panel (Achievements list) */
+.achivement-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.achivement-info-details {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.3s;
+}
+
+.achivement-info-details:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.achivement-title {
+    color: #4338ca;
+    margin-bottom: 8px;
+}
+
+.achivement-desc {
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.form-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Input & select styles */
+.form-group input,
+.form-group select,
+.form-group label {
+  font-size: 16px;
+}
+
+.form-group select {
+  flex: 1;
+  min-width: 200px;
+  padding: 12px 16px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.achivement-edit-form {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: #fff;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.achivement-edit-form-label{
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.form-group input[type="file"] {
+  flex: 1 1 48%;
+  padding: 8px;
+  border: 3px dashed #aaa;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+  border-color: #0073e6;
+}
+
+/* Overlay container */
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0,0,0,0.7);
+  z-index: 2;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Overlay visible state */
+.overlay.active {
+  display: flex;                /* ✅ show overlay as flex for centering */
+}
+
+.search-user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 10px 20px;
+}
+
+/* Individual user card */
+.search-user-card {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    min-height: 90px;       /* slightly reduced height for modern feel */
+    min-width: 1175px;        /* responsive width */
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-user-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* Avatar */
+.search-user-card .avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-right: 16px;
+    object-fit: cover;
+    background: #eee;
+}
+
+/* Text container for name, dept, and employeeId */
+.search-user-info {
+    display: flex;
+    margin-left: 350px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+}
+
+/* First line: name + department */
+.search-user-main {
+    font-size: 1.45em;
+    font-weight: 600;
+    color: #3E2723;
+    min-width: 700px;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+/* Second line: employeeId */
+.search-user-sub {
+    font-size: 0.95em;
+    color: #555;
+}
+

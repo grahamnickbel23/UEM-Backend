@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Achievement</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style4.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="header">
+    <a href="profile.html">
+      <figure class="logo left">
+        <img src="./assets/UEMKolkata.png" alt="UEM Logo" />
+      </figure>
+    </a>
+
+    <div class="mid-heading">
+      <h1 class="heading">UNIVERSITY OF ENGINEERING AND MANAGEMENT</h1>
+    </div>
+
+    <a href="profile.html">
+      <figure class="logo right">
+        <img src="./assets/IEMKolkata.png" alt="IEM Logo" />
+      </figure>
+    </a>
+  </header>
+
+  <!-- Main Portion -->
+  <div class="achivement-main">
+    <!-- Profile Section -->
+    <div class="achivement-profile">
+      <a href="otherProfile.html" class="achivement-profile-a">
+        <div class="profile-pic">
+          <img id="profile-img" src="#" alt="Profile Image">
+          <div id="profile-initials" class="profile-initials"></div>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-info-row">
+            <span class="profile-info-label">Name:</span>
+            <span id="profile-name" class="profile-info-value">Graham Mondal</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Department:</span>
+            <span id="profile-dept" class="profile-info-value">CSE</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Employee ID:</span>
+            <span id="employee-id" class="profile-info-value">3rd Year</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Created At:</span>
+            <span id="created-at" class="profile-info-value">D343 / 401</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-info-label">Logged In:</span>
+            <span id="updated-at" class="profile-info-value">Shapoorji Palonji Housing Complex</span>
+          </div>
+        </div>
+      </a>
+    </div> <!-- ✅ Properly closed profile section -->
+
+    <!-- Achievement List Section -->
+    <div class="achivement-list" id="achievements-container"></div>
+  </div> <!-- ✅ Close .achivement-main -->
+
+  <!-- Overlay Modal -->
+  <div id="achievement-overlay" class="achievement-overlay">
+    <div class="achievement-modal">
+      <span id="close-overlay" class="close-btn">&times;</span>
+      <h1 id="overlay-title">Achievement Title</h1>
+      <p><strong>Type:</strong> <span id="overlay-type"></span></p>
+      <p><strong>Organizer:</strong> <span id="overlay-organizer"></span></p>
+      <p><strong>Location:</strong> <span id="overlay-location"></span></p>
+      <p><strong>Status:</strong> <span id="overlay-status"></span></p>
+      <p><strong>Identification No:</strong> <span id="overlay-id"></span></p>
+      <p><strong>Event Date:</strong> <span id="overlay-date"></span></p>
+      <p><strong>Created By:</strong> <span id="overlay-creator"></span></p>
+      <p><strong>Description:</strong> <span id="overlay-desc"></span></p>
+      <div id="overlay-doc" style="display: none;"></div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="script4.js"></script>
+  <script src="script11.js"></script>
+  <script src="script5.js"></script>
+</body>
+
+</html>
