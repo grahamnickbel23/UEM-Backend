@@ -99,7 +99,34 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
+    // logout logic
+    const logoutBtn = document.getElementById("logout-btn");
+    logoutBtn.addEventListener("click", async () => {
+      if (!confirm("Are you sure you want to sign out?")) return;
 
+      try {
+        // Call logout API (adjust path if needed)
+        const res = await fetch("/api/auth/signout", {
+          method: "POST",
+          credentials: "include"
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          // Clear local data if stored
+          localStorage.removeItem("localData");
+          // Redirect to home page
+          window.location.href = "index.html";
+        } else {
+          alert("Logout failed. Please try again.");
+        }
+      } catch (err) {
+        console.error("Logout error:", err);
+        alert("Something went wrong during logout.");
+      }
+    });
+    
   } catch (err) {
     console.error("Error fetching user profile:", err);
   }

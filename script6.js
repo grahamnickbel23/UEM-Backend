@@ -91,7 +91,8 @@ const closeOverlayBtn = document.getElementById("close-overlay");
 let currentAchievement = null;
 
 async function openAchievementOverlay(ach) {
-  currentAchievement = ach; // save reference for later deletion
+  currentAchievement = ach; // keep reference
+
   try {
     const res = await fetch("/api/achivement/read", {
       method: "POST",
@@ -104,20 +105,23 @@ async function openAchievementOverlay(ach) {
     if (!res.ok || !data.success) throw new Error("Failed to fetch achievement details");
 
     // Fill overlay content
-    document.getElementById("overlay-title").textContent = data.message.title;
-    document.getElementById("overlay-type").textContent = data.message.achivementType || "N/A";
-    document.getElementById("overlay-organizer").textContent = data.message.organizer || "N/A";
-    document.getElementById("overlay-location").textContent = data.message.location || "N/A";
-    document.getElementById("overlay-status").textContent = data.message.currentStatus || "N/A";
-    document.getElementById("overlay-id").textContent = data.message.identification_number || "N/A";
-    const dateItem = new Date(data.message.createdAt);
-    document.getElementById("overlay-date").textContent = dateItem.toLocaleDateString("en-IN", {
+    const msg = data.message;
+    document.getElementById("overlay-title").textContent = msg.title;
+    document.getElementById("overlay-type").textContent = msg.achivementType || "N/A";
+    document.getElementById("overlay-organizer").textContent = msg.organizer || "N/A";
+    document.getElementById("overlay-location").textContent = msg.location || "N/A";
+    document.getElementById("overlay-status").textContent = msg.currentStatus || "N/A";
+    document.getElementById("overlay-id").textContent = msg.identification_number || "N/A";
+    document.getElementById("overlay-date").textContent = new Date(msg.createdAt).toLocaleDateString("en-IN", {
       day: "2-digit",
       month: "long",
       year: "numeric"
-    }) || 'N/A';
-    document.getElementById("overlay-creator").textContent = data.message.createdBy || "N/A";
-    document.getElementById("overlay-desc").textContent = data.message.description || "No description available";
+    });
+    document.getElementById("overlay-creator").textContent = msg.createdBy || "N/A";
+    document.getElementById("overlay-desc").textContent = msg.description || "No description available";
+
+    // store document id for later use (for download API)
+    currentAchievement._id = msg._id || msg.id;
 
     overlay.style.display = "flex";
   } catch (err) {
@@ -125,6 +129,7 @@ async function openAchievementOverlay(ach) {
     alert("Could not load achievement details.");
   }
 }
+
 
 // Close overlay on click
 closeOverlayBtn.addEventListener("click", () => {
@@ -170,6 +175,42 @@ async function deleteDocument(ach) {
     alert("Could not delete achievement.");
   }
 }
+
+// --- Download document ---
+const downloadDoc = document.getElementById("overlay-download");
+downloadDoc.addEventListener("click", () => downloadDocument(currentAchievement));
+
+async function downloadDocument(ach) {
+  if (!ach || !ach._id) return alert("Document ID missing or no achievement selected!");
+
+  try {
+    const res = await fetch("/api/auth/downloadachivement", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: ach._id }), // 👈 send id here
+      credentials: "include"
+    });
+
+    if (!res.ok) throw new Error("Download failed");
+
+    // Expecting a binary file (PDF/doc/image)
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${ach.title || "achievement"}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Error downloading achievement:", err);
+    alert("Could not download document.");
+  }
+}
+
 
 
 // --- Helper functions ---

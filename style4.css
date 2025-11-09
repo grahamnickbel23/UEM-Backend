@@ -215,6 +215,24 @@
   animation: fadeIn 0.3s ease;
 }
 
+#overlay-download, #overlay-doc {
+  display: inline-block;
+  margin-top: 10px;
+  margin-right: 10px;
+  color: white;
+  background: #007bff;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: 0.2s;
+}
+#overlay-doc {
+  background: #dc3545;
+}
+#overlay-download:hover, #overlay-doc:hover {
+  opacity: 0.85;
+}
+
 /* Close button (X) */
 #closeOverlayBtn {
   position: absolute;

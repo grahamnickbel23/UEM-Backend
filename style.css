@@ -384,6 +384,22 @@ h2 {
   margin-top: 20px;
 }
 
+.logout-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.logout-button:hover {
+  background-color: #c82333;
+  transform: scale(1.03);
+}
+
 /* --------- ACHIEVEMENT CARD --------- */
 .achivement {
   flex: 1;

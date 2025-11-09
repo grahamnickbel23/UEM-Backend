@@ -21,26 +21,6 @@ viewer.addEventListener('click', (e) => {
 });
 
 // // code for if no profile pic is there
-// const profileInitialsEl = document.getElementById('profile-initials');
-
-// // Fetch profile data from API
-// fetch('/api/auth/profile')
-//   .then(response => response.json())
-//   .then(profileData => {
-//     profileInitialsEl.textContent = generateInitials(profileData.firstName, profileData.lastName);
-//   })
-//   .catch(error => {
-//     console.error('Error loading profile:', error);
-//     profileInitialsEl.textContent = "GU"; // fallback
-//   });
-
-// // Generate initials
-// function generateInitials(first, last) {
-//   if (!first && !last) return "GU"; // fallback for Guest User
-//   const f = first ? first.charAt(0).toUpperCase() : "";
-//   const l = last ? last.charAt(0).toUpperCase() : "";
-//   return `${f}${l}`;
-// }
 
 
 
