@@ -11,7 +11,7 @@ if (loginForm) {
 
     try {
       // sendig api request to backend
-      const response = await fetch("http://15.207.99.116:8000/auth/requestlogin", {
+      const response = await fetch("api/auth/requestlogin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
